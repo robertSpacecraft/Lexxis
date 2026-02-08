@@ -1,4 +1,7 @@
 .header {
+    height: 80px; 
+    display: flex;
+    align-items: center;
     background: rgba(17, 24, 39, 0.8); /* Fondo traslúcido */
     backdrop-filter: blur(12px); /* Efecto cristalino moderno */
     -webkit-backdrop-filter: blur(12px);
@@ -21,7 +24,7 @@
 }
 
 .logoImage {
-    height: 80px;
+    height: 180px;
     width: auto;
     object-fit: contain;
     filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.5)) brightness(1.5);
@@ -30,7 +33,9 @@
 .logoContainer {
     display: flex;
     align-items: center;
-    padding: 0;
+    height: 200px;
+    width: auto;
+    position: relative;
 }
 
 .logoImage:hover {

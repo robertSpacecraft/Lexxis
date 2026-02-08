@@ -7,10 +7,9 @@ export default function HomePage() {
             <section className={styles.hero}>
                 <div className={styles.heroInner}>
                     <div className={styles.copy}>
-                        <div className={styles.kicker}>LEX XIS</div>
-                        <h1 className={styles.title}>Calzado y fabricación bajo demanda, en una experiencia simple.</h1>
+                        <h1 className={styles.title}>Calzado impreso en 3D y servicios de impresión.</h1>
                         <p className={styles.lead}>
-                            Lexxis combina un catálogo de variantes listas para comprar con un flujo de impresión
+                            Lexxis combina un catálogo de calzado impreso en 3D y un servicio de de impresión
                             de archivos para producir bajo demanda. Explora sin registrarte y entra solo cuando lo necesites.
                         </p>
 
