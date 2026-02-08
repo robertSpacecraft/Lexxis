@@ -56,7 +56,7 @@ export default function LoginPage() {
     const role = user?.type || user?.role || null;
     if (role && String(role).toLowerCase() === "admin") {
         // Ajusta esta URL si tu login admin es otra ruta
-        window.location.href = "http://localhost/login";
+        window.location.href = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost'}/login`;
         return null;
     }
 
