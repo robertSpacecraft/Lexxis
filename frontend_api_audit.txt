@@ -1,0 +1,838 @@
+// src/api/http.js
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost";
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length !== 2) return null;
+    return decodeURIComponent(parts.pop().split(";").shift());
+}
+
+function buildUrl(path) {
+    if (!path.startsWith("/")) path = "/" + path;
+    return BASE_URL.replace(/\/$/, "") + path;
+}
+
+async function parseResponse(res) {
+    // 204 No Content
+    if (res.status === 204) return { status: res.status, data: null };
+
+    const contentType = res.headers.get("content-type") || "";
+    let data = null;
+
+    if (contentType.includes("application/json")) {
+        try {
+            data = await res.json();
+        } catch {
+            data = null;
+        }
+    } else {
+        // fallback por si backend devuelve texto/HTML en algún caso
+        try {
+            data = await res.text();
+        } catch {
+            data = null;
+        }
+    }
+
+    return { status: res.status, data };
+}
+
+async function request(method, path, body, options = {}) {
+    const headers = { ...(options.headers || {}) };
+
+    // Impone siempre Accept para que Breeze devuelva 204 en SPA
+    headers["Accept"] = "application/json";
+
+    headers["X-Requested-With"] = "XMLHttpRequest";
+
+    // Content-Type solo si hay body y no es FormData
+    const isFormData = body instanceof FormData;
+    if (body !== undefined && body !== null && !isFormData) {
+        headers["Content-Type"] = "application/json";
+    }
+
+    // XSRF header (no en csrf-cookie)
+    const xsrf = getCookie("XSRF-TOKEN");
+    if (xsrf && path !== "/sanctum/csrf-cookie") {
+        headers["X-XSRF-TOKEN"] = xsrf;
+    }
+    // DEBUG temporal (solo desarrollo)
+if (import.meta.env.DEV && path === "/api/login") {
+  console.log("[DEBUG login] BASE_URL =", BASE_URL);
+  console.log("[DEBUG login] document.cookie =", document.cookie);
+  console.log("[DEBUG login] XSRF cookie =", getCookie("XSRF-TOKEN"));
+  console.log("[DEBUG login] X-XSRF-TOKEN header =", headers["X-XSRF-TOKEN"]);
+}
+
+
+    const res = await fetch(buildUrl(path), {
+        ...options,
+        method,
+        credentials: "include",
+        headers,
+        body:
+            body === undefined || body === null
+                ? undefined
+                : isFormData
+                    ? body
+                    : JSON.stringify(body),
+    });
+
+
+    const { status, data } = await parseResponse(res);
+
+    if (!res.ok) {
+        // normalizamos el error para capturarlo arriba con {status, data}
+        throw { status, data };
+    }
+
+    return { status, data };
+}
+
+export async function csrf() {
+    // Sanctum CSRF cookie endpoint NO está bajo /api
+    return request("GET", "/sanctum/csrf-cookie");
+}
+
+export async function get(path, options) {
+    return request("GET", path, undefined, options);
+}
+
+export async function post(path, body, options) {
+    return request("POST", path, body, options);
+}
+
+export async function patch(path, body, options) {
+    return request("PATCH", path, body, options);
+}
+
+export async function del(path, options) {
+    return request("DELETE", path, undefined, options);
+}
+import { authStorage } from '../store/authStorage';
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost';
+const API_PREFIX = import.meta.env.VITE_API_PREFIX || '/api';
+const API_URL = `${BASE_URL.replace(/\/$/, '')}${API_PREFIX}`;
+const SANCTUM_URL = `${BASE_URL.replace(/\/$/, '')}/sanctum/csrf-cookie`;
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+    return null;
+}
+
+async function request(endpoint, { method = 'GET', body, headers = {}, ...customConfig } = {}) {
+    const token = authStorage.getToken();
+    const xsrfToken = getCookie('XSRF-TOKEN');
+    
+    const config = {
+        method,
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest', // Important for Laravel to recognize AJAX
+            ...(token && { 'Authorization': `Bearer ${token}` }),
+            ...(xsrfToken && { 'X-XSRF-TOKEN': xsrfToken }),
+            ...headers,
+        },
+        credentials: 'include', // Important to send/receive cookies
+        ...customConfig,
+    };
+
+    if (body) {
+        if (body instanceof FormData) {
+            config.body = body;
+        } else {
+            config.headers['Content-Type'] = 'application/json';
+            config.body = JSON.stringify(body);
+        }
+    }
+
+    try {
+        const response = await fetch(`${API_URL}${endpoint}`, config);
+        
+        if (response.status === 401) {
+            authStorage.clear();
+            // Optional: redirect only if not already on login page
+            if (window.location.pathname !== '/login') {
+                window.location.href = '/login';
+            }
+            return Promise.reject({ message: 'Unauthorized' });
+        }
+
+        const data = await response.json().catch(() => ({})); 
+
+        if (!response.ok) {
+            return Promise.reject(data);
+        }
+
+        return { status: response.status, data };
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+export const apiClient = {
+    get: (endpoint, customConfig = {}) => request(endpoint, { ...customConfig, method: 'GET' }),
+    post: (endpoint, body, customConfig = {}) => request(endpoint, { ...customConfig, method: 'POST', body }),
+    put: (endpoint, body, customConfig = {}) => request(endpoint, { ...customConfig, method: 'PUT', body }),
+    delete: (endpoint, customConfig = {}) => request(endpoint, { ...customConfig, method: 'DELETE' }),
+    getCsrfCookie: async () => {
+        await fetch(SANCTUM_URL, { credentials: 'include' });
+    }
+};
+import { apiClient } from './apiClient';
+
+export const authApi = {
+    login: async (credentials) => {
+        await apiClient.getCsrfCookie();
+        return apiClient.post('/token-login', credentials);
+    },
+};
+import { apiClient } from './apiClient';
+
+export const catalogApi = {
+    getProducts: () => apiClient.get('/catalog/products'),
+    getProduct: (id) => apiClient.get(`/catalog/products/${id}`),
+    getVariants: (productId) => apiClient.get(`/catalog/products/${productId}/variants`),
+    getVariant: (productId, variantId) => apiClient.get(`/catalog/products/${productId}/variants/${variantId}`),
+};
+import { apiClient } from './apiClient';
+
+export const printFilesApi = {
+    getPrintFiles: () => apiClient.get('/print-files'),
+    uploadPrintFile: (formData) => apiClient.post('/print-files', formData),
+    getPrintFile: (id) => apiClient.get(`/print-files/${id}`),
+    downloadPrintFile: async (id) => {
+        const token = localStorage.getItem('lexxis_token');
+        const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost';
+        const API_PREFIX = import.meta.env.VITE_API_PREFIX || '/api';
+        const url = `${BASE_URL.replace(/\/$/, '')}${API_PREFIX}/print-files/${id}/download`;
+
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+
+        if (!response.ok) throw new Error('Download failed');
+
+        return response.blob();
+    }
+};
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { authApi } from '../api/auth';
+import { authStorage } from '../store/authStorage';
+import Navbar from '../components/Navbar';
+
+export default function Login() {
+    const [credentials, setCredentials] = useState({ email: 'demo@lexxis.test', password: 'password' });
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        setCredentials(prev => ({ ...prev, [e.target.name]: e.target.value }));
+        setError(null);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
+
+        try {
+            const { data } = await authApi.login(credentials);
+            if (data.token) {
+                authStorage.setToken(data.token);
+                authStorage.setUser(data.user);
+                navigate('/');
+            } else {
+                setError('Respuesta inválida del servidor');
+            }
+        } catch (err) {
+            console.error(err);
+            setError(err.message || 'Credenciales incorrectas o error de conexión');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <>
+            <Navbar />
+            <div className="container" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div className="card" style={{ width: '100%', maxWidth: '400px', padding: '2.5rem' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--primary)' }}>Iniciar Sesión</h1>
+                        <p className="text-muted">Accede a tu área privada</p>
+                    </div>
+
+                    {error && (
+                        <div style={{ padding: '0.75rem', background: '#fee2e2', color: '#991b1b', borderRadius: '0.5rem', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
+                            {error}
+                        </div>
+                    )}
+
+                    <form onSubmit={handleSubmit}>
+                        <div className="input-group">
+                            <label className="input-label">Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={credentials.email}
+                                onChange={handleChange}
+                                className="form-input"
+                                required
+                            />
+                        </div>
+
+                        <div className="input-group">
+                            <label className="input-label">Contraseña</label>
+                            <input
+                                type="password"
+                                name="password"
+                                value={credentials.password}
+                                onChange={handleChange}
+                                className="form-input"
+                                required
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="btn btn-primary"
+                            style={{ width: '100%', marginTop: '1rem' }}
+                            disabled={loading}
+                        >
+                            {loading ? <div className="spinner" style={{ width: '16px', height: '16px', borderWidth: '2px' }}></div> : 'Entrar'}
+                        </button>
+                    </form>
+
+                    <div style={{ marginTop: '2rem', textAlign: 'center', fontSize: '0.85rem' }} className="text-muted">
+                        <p>Credenciales demo:</p>
+                        <p>demo@lexxis.test / password</p>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+}
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { catalogApi } from '../api/catalog';
+import Navbar from '../components/Navbar';
+
+export default function CatalogProducts() {
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const { data } = await catalogApi.getProducts();
+                // Adjust based on actual API response structure (e.g., data.data or just data)
+                setProducts(Array.isArray(data) ? data : data.data || []);
+            } catch (err) {
+                console.error(err);
+                setError('No se pudieron cargar los productos.');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProducts();
+    }, []);
+
+    if (loading) return (
+        <>
+            <Navbar />
+            <div className="container" style={{ textAlign: 'center', padding: '4rem' }}>
+                <div className="spinner" style={{ margin: '0 auto' }}></div>
+            </div>
+        </>
+    );
+
+    if (error) return (
+        <>
+            <Navbar />
+            <div className="container" style={{ textAlign: 'center', padding: '4rem', color: 'var(--error)' }}>
+                {error}
+            </div>
+        </>
+    );
+
+    return (
+        <>
+            <Navbar />
+            <div className="container">
+                <h1 className="page-title">Catálogo de Productos</h1>
+
+                {products.length === 0 ? (
+                    <p className="text-muted">No hay productos disponibles.</p>
+                ) : (
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2rem' }}>
+                        {products.map(product => (
+                            <Link key={product.id} to={`/catalog/products/${product.id}`} className="card" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                                <div style={{ marginBottom: '1rem', flexGrow: 1 }}>
+                                    <h2 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{product.name}</h2>
+                                    {product.slug && <p className="text-sm text-muted" style={{ marginBottom: '0.5rem' }}>{product.slug}</p>}
+                                    {product.hasOwnProperty('is_active') && (
+                                        <span style={{
+                                            padding: '0.25rem 0.5rem',
+                                            borderRadius: '9999px',
+                                            fontSize: '0.75rem',
+                                            fontWeight: 600,
+                                            background: product.is_active ? '#dcfce7' : '#fee2e2',
+                                            color: product.is_active ? '#166534' : '#991b1b'
+                                        }}>
+                                            {product.is_active ? 'Activo' : 'Inactivo'}
+                                        </span>
+                                    )}
+                                </div>
+                                <div className="btn btn-secondary" style={{ width: '100%', marginTop: 'auto' }}>
+                                    Ver Detalles
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </>
+    );
+}
+import { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { catalogApi } from '../api/catalog';
+import Navbar from '../components/Navbar';
+
+export default function CatalogProductDetail() {
+    const { productId } = useParams();
+    const [product, setProduct] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const { data } = await catalogApi.getProduct(productId);
+                setProduct(data.data || data); // Handle wrapped or unwrapped response
+            } catch (err) {
+                console.error(err);
+                setError('No se pudo cargar el producto.');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProduct();
+    }, [productId]);
+
+    if (loading) return (
+        <>
+            <Navbar />
+            <div className="container" style={{ textAlign: 'center', padding: '4rem' }}>
+                <div className="spinner" style={{ margin: '0 auto' }}></div>
+            </div>
+        </>
+    );
+
+    if (error || !product) return (
+        <>
+            <Navbar />
+            <div className="container" style={{ textAlign: 'center', padding: '4rem', color: 'var(--error)' }}>
+                {error || 'Producto no encontrado'}
+            </div>
+        </>
+    );
+
+    return (
+        <>
+            <Navbar />
+            <div className="container">
+                <Link to="/catalog" className="text-muted text-sm" style={{ marginBottom: '1rem', display: 'inline-block' }}>&larr; Volver al catálogo</Link>
+
+                <div className="card" style={{ maxWidth: '800px', margin: '0 auto' }}>
+                    <div style={{ padding: '2rem' }}>
+                        <h1 style={{ fontSize: '2rem', marginBottom: '1.5rem', color: 'var(--primary)' }}>{product.name}</h1>
+
+                        <div style={{ display: 'grid', gap: '1rem', marginBottom: '2rem' }}>
+                            {/* Render defensivo de campos disponibles */}
+                            {Object.entries(product).map(([key, value]) => {
+                                if (['id', 'name', 'created_at', 'updated_at'].includes(key)) return null; // Skip common fields or display differently
+                                if (typeof value === 'object') return null; // Skip nested objects for now
+
+                                return (
+                                    <div key={key} style={{ display: 'flex', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
+                                        <span style={{ fontWeight: 600, width: '150px', textTransform: 'capitalize' }}>{key.replace(/_/g, ' ')}:</span>
+                                        <span className="text-muted">{String(value)}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '1rem' }}>
+                            <Link to={`/catalog/products/${product.id}/variants`} className="btn btn-primary">
+                                Ver Variantes
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+}
+import { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { catalogApi } from '../api/catalog';
+import Navbar from '../components/Navbar';
+
+export default function CatalogVariants() {
+    const { productId } = useParams();
+    const [variants, setVariants] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchVariants = async () => {
+            try {
+                const { data } = await catalogApi.getVariants(productId);
+                setVariants(Array.isArray(data) ? data : data.data || []);
+            } catch (err) {
+                console.error(err);
+                setError('No se pudieron cargar las variantes.');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchVariants();
+    }, [productId]);
+
+    if (loading) return (
+        <>
+            <Navbar />
+            <div className="container" style={{ textAlign: 'center', padding: '4rem' }}>
+                <div className="spinner" style={{ margin: '0 auto' }}></div>
+            </div>
+        </>
+    );
+
+    if (error) return (
+        <>
+            <Navbar />
+            <div className="container" style={{ textAlign: 'center', padding: '4rem', color: 'var(--error)' }}>
+                {error}
+            </div>
+        </>
+    );
+
+    return (
+        <>
+            <Navbar />
+            <div className="container">
+                <Link to={`/catalog/products/${productId}`} className="text-muted text-sm" style={{ marginBottom: '1rem', display: 'inline-block' }}>&larr; Volver al producto</Link>
+                <h1 className="page-title">Variantes del Producto</h1>
+
+                {variants.length === 0 ? (
+                    <p className="text-muted">No hay variantes disponibles para este producto.</p>
+                ) : (
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2rem' }}>
+                        {variants.map(variant => (
+                            <Link key={variant.id} to={`/catalog/products/${productId}/variants/${variant.id}`} className="card" style={{ textDecoration: 'none', color: 'inherit' }}>
+                                <div style={{ marginBottom: '1rem' }}>
+                                    <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>SKU: {variant.sku || 'N/A'}</h3>
+
+                                    <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+                                        {variant.size_eu && <p>Talla: {variant.size_eu}</p>}
+                                        {variant.color_name && <p>Color: {variant.color_name}</p>}
+                                        {variant.price && <p style={{ fontWeight: 600, color: 'var(--text-main)', marginTop: '0.5rem' }}>{variant.price} €</p>}
+                                    </div>
+                                </div>
+                                <div className="btn btn-secondary" style={{ width: '100%', fontSize: '0.875rem' }}>
+                                    Ver Detalle
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </>
+    );
+}
+import { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { catalogApi } from '../api/catalog';
+import Navbar from '../components/Navbar';
+
+export default function CatalogVariantDetail() {
+    const { productId, variantId } = useParams();
+    const [variant, setVariant] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchVariant = async () => {
+            try {
+                const { data } = await catalogApi.getVariant(productId, variantId);
+                setVariant(data.data || data);
+            } catch (err) {
+                console.error(err);
+                setError('No se pudo cargar la variante.');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchVariant();
+    }, [productId, variantId]);
+
+    if (loading) return (
+        <>
+            <Navbar />
+            <div className="container" style={{ textAlign: 'center', padding: '4rem' }}>
+                <div className="spinner" style={{ margin: '0 auto' }}></div>
+            </div>
+        </>
+    );
+
+    if (error || !variant) return (
+        <>
+            <Navbar />
+            <div className="container" style={{ textAlign: 'center', padding: '4rem', color: 'var(--error)' }}>
+                {error || 'Variante no encontrada'}
+            </div>
+        </>
+    );
+
+    return (
+        <>
+            <Navbar />
+            <div className="container">
+                <Link to={`/catalog/products/${productId}/variants`} className="text-muted text-sm" style={{ marginBottom: '1rem', display: 'inline-block' }}>&larr; Volver a variantes</Link>
+
+                <div className="card" style={{ maxWidth: '600px', margin: '0 auto' }}>
+                    <div style={{ padding: '2rem' }}>
+                        <h1 style={{ fontSize: '1.75rem', marginBottom: '1.5rem', color: 'var(--primary)' }}>
+                            SKU: {variant.sku || 'Sin SKU'}
+                        </h1>
+
+                        <div style={{ display: 'grid', gap: '1rem' }}>
+                            {variant.size_eu && (
+                                <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
+                                    <span style={{ fontWeight: 600 }}>Talla (EU)</span>
+                                    <span>{variant.size_eu}</span>
+                                </div>
+                            )}
+                            {variant.color_name && (
+                                <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
+                                    <span style={{ fontWeight: 600 }}>Color</span>
+                                    <span>{variant.color_name}</span>
+                                </div>
+                            )}
+                            {variant.material_id && (
+                                <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
+                                    <span style={{ fontWeight: 600 }}>ID Material</span>
+                                    <span>{variant.material_id}</span>
+                                </div>
+                            )}
+                            {variant.price && (
+                                <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem', marginTop: '1rem' }}>
+                                    <span style={{ fontWeight: 600, fontSize: '1.25rem' }}>Precio</span>
+                                    <span style={{ fontWeight: 700, fontSize: '1.25rem', color: 'var(--primary)' }}>{variant.price} €</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+}
+import { useState, useEffect } from 'react';
+import { printFilesApi } from '../api/printFiles';
+import Navbar from '../components/Navbar';
+
+export default function PrintFiles() {
+    const [files, setFiles] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [uploading, setUploading] = useState(false);
+    const [uploadSuccess, setUploadSuccess] = useState(null);
+
+    // Form state
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [notes, setNotes] = useState('');
+
+    const fetchFiles = async () => {
+        setLoading(true);
+        try {
+            const { data } = await printFilesApi.getPrintFiles();
+            setFiles(Array.isArray(data) ? data : data.data || []);
+        } catch (err) {
+            console.error(err);
+            setError('No se pudieron cargar los archivos.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchFiles();
+    }, []);
+
+    const handleFileChange = (e) => {
+        if (e.target.files && e.target.files[0]) {
+            setSelectedFile(e.target.files[0]);
+        }
+    };
+
+    const handleUpload = async (e) => {
+        e.preventDefault();
+        if (!selectedFile) return;
+
+        setUploading(true);
+        setUploadSuccess(null);
+        setError(null);
+
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+        if (notes) formData.append('notes', notes);
+
+        try {
+            await printFilesApi.uploadPrintFile(formData);
+            setUploadSuccess('Subido correctamente');
+            setSelectedFile(null);
+            setNotes('');
+            // Reset file input
+            e.target.reset();
+            // Refresh list
+            fetchFiles();
+        } catch (err) {
+            console.error(err);
+            setError('Error al subir el archivo.');
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    const handleDownload = async (id, originalName) => {
+        try {
+            const blob = await printFilesApi.downloadPrintFile(id);
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = originalName || `file-${id}`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (err) {
+            console.error(err);
+            alert('Error al descargar el archivo');
+        }
+    };
+
+    return (
+        <>
+            <Navbar />
+            <div className="container">
+                <h1 className="page-title">Mis Archivos de Impresión</h1>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '2rem', alignItems: 'start' }}>
+                    {/* Upload Form */}
+                    <div className="card">
+                        <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', color: 'var(--primary)' }}>Subir Nuevo Archivo</h2>
+
+                        {uploadSuccess && (
+                            <div style={{ padding: '0.75rem', background: '#dcfce7', color: '#166534', borderRadius: '0.5rem', marginBottom: '1rem', fontSize: '0.9rem' }}>
+                                {uploadSuccess}
+                            </div>
+                        )}
+
+                        <form onSubmit={handleUpload}>
+                            <div className="input-group">
+                                <label className="input-label">Archivo</label>
+                                <input
+                                    type="file"
+                                    onChange={handleFileChange}
+                                    className="form-input"
+                                    required
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label className="input-label">Notas (Opcional)</label>
+                                <textarea
+                                    value={notes}
+                                    onChange={(e) => setNotes(e.target.value)}
+                                    className="form-input"
+                                    rows="3"
+                                ></textarea>
+                            </div>
+
+                            <button
+                                type="submit"
+                                className="btn btn-primary"
+                                style={{ width: '100%' }}
+                                disabled={uploading}
+                            >
+                                {uploading ? <div className="spinner" style={{ width: '16px', height: '16px', borderWidth: '2px' }}></div> : 'Subir Archivo'}
+                            </button>
+                        </form>
+                    </div>
+
+                    {/* Files List */}
+                    <div>
+                        {loading ? (
+                            <div className="spinner" style={{ margin: '0 auto' }}></div>
+                        ) : error ? (
+                            <div style={{ color: 'var(--error)' }}>{error}</div>
+                        ) : files.length === 0 ? (
+                            <div className="card" style={{ textAlign: 'center', padding: '3rem' }}>
+                                <p className="text-muted">No has subido ningún archivo aún.</p>
+                            </div>
+                        ) : (
+                            <div style={{ display: 'grid', gap: '1rem' }}>
+                                {files.map(file => (
+                                    <div key={file.id} className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 1.5rem' }}>
+                                        <div>
+                                            <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>{file.original_name}</div>
+                                            <div className="text-sm text-muted">
+                                                <span>{file.file_extension?.toUpperCase()}</span>
+                                                <span style={{ margin: '0 0.5rem' }}>•</span>
+                                                <span>{(file.file_size / 1024).toFixed(2)} KB</span>
+                                                <span style={{ margin: '0 0.5rem' }}>•</span>
+                                                <span>{new Date(file.created_at).toLocaleDateString()}</span>
+                                            </div>
+                                            {file.status && (
+                                                <div style={{ marginTop: '0.25rem' }}>
+                                                    <span style={{
+                                                        padding: '0.125rem 0.375rem',
+                                                        borderRadius: '9999px',
+                                                        fontSize: '0.75rem',
+                                                        background: '#f3f4f6',
+                                                        color: '#4b5563'
+                                                    }}>
+                                                        {file.status}
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <button
+                                            onClick={() => handleDownload(file.id, file.original_name)}
+                                            className="btn btn-secondary"
+                                            title="Descargar"
+                                        >
+                                            ⬇ Descargar
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+}

@@ -1,0 +1,47 @@
+:root {
+    --bg-dark: #0b0f1a;
+    --accent-cyan: #00d4ff;
+    --text-main: #e5e7eb;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    /* Eliminamos el flex center del body */
+    display: block;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Scrollbar personalizada para estilo tech */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0b0f1a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1f2937;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-cyan);
+}

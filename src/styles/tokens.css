@@ -1,0 +1,70 @@
+:root {
+  /* Base Colors */
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+  --color-gray-light: #E5E5E5;
+  --color-blue-dark: #14213D;
+  --color-orange: #FCA311;
+
+  /* Roles (60/30/10 Rule) */
+  --color-bg: var(--color-white);
+  --color-surface: var(--color-gray-light);
+  --color-text: var(--color-black);
+  --color-text-muted: #555555;
+  --color-primary: var(--color-blue-dark);
+  --color-accent: var(--color-orange);
+  --color-border: #DDDDDD;
+
+  /* Semantic States */
+  --color-success: #2E7D32;
+  --color-warning: #ED6C02;
+  --color-error: #D32F2F;
+
+  /* Typography */
+  --font-primary: 'Roboto', sans-serif;
+  --font-secondary: 'Exo 2', sans-serif;
+
+  /* Font Scale (REM) */
+  --font-size-display: 3rem;       /* 48px */
+  --font-size-h1: 2.25rem;        /* 36px */
+  --font-size-h2: 1.875rem;       /* 30px */
+  --font-size-h3: 1.5rem;         /* 24px */
+  --font-size-h4: 1.25rem;         /* 20px */
+  --font-size-body-lg: 1.125rem;   /* 18px */
+  --font-size-body: 1rem;         /* 16px */
+  --font-size-body-sm: 0.875rem;   /* 14px */
+  --font-size-caption: 0.75rem;    /* 12px */
+
+  --line-height-display: 3.5rem;   /* 56px */
+  --line-height-heading: 1.2;
+  --line-height-body: 1.5;
+
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* Spacing Scale (REM) */
+  --spacing-xxs: 0.25rem;   /* 4px */
+  --spacing-xs: 0.5rem;     /* 8px */
+  --spacing-sm: 0.75rem;    /* 12px */
+  --spacing-md: 1rem;       /* 16px */
+  --spacing-lg: 1.5rem;     /* 24px */
+  --spacing-xl: 2rem;       /* 32px */
+  --spacing-xxl: 3rem;      /* 48px */
+
+  /* Borders and Radii (REM for radii) */
+  --radius-sm: 0.25rem;     /* 4px */
+  --radius-md: 0.5rem;      /* 8px */
+  --radius-lg: 0.75rem;     /* 12px */
+  --border-default: 1px solid var(--color-border);
+
+  /* Shadows (Mixed Units) */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08); /* 4px 12px */
+  
+  /* Layout */
+  --max-width-container: 1200px;
+  --padding-horizontal: var(--spacing-md);
+}
+

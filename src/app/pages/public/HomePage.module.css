@@ -1,0 +1,160 @@
+/* En HomePage.module.css */
+.page {
+    background-image: 
+        radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 50px 50px, 50px 50px; /* Crea una rejilla tecnológica */
+    padding-bottom: 100px;
+}
+
+.title {
+    font-size: 4rem;
+    background: linear-gradient(to right, #fff, #71717a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
+
+.hero {
+    width: 100%;
+    max-width: none;
+    padding: 60px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.heroInner {
+    display: grid;
+    grid-template-columns: 1.4fr 0.6fr; 
+    gap: 60px;
+    max-width: 100%;
+}
+
+.copy {
+    padding: 6px;
+}
+
+.kicker {
+    font-size: 12px;
+    letter-spacing: 2px;
+    opacity: 0.75;
+}
+
+
+.lead {
+    margin: 14px 0 0;
+    opacity: 0.9;
+    max-width: 62ch;
+    line-height: 1.55;
+}
+
+.ctas {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+}
+
+.badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.badge {
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.visual {
+    display: grid;
+    gap: 12px;
+}
+
+.visualCard {
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 16px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    min-height: 210px;
+}
+
+.visualGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.visualMini {
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 16px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    min-height: 120px;
+}
+
+.visualLabel {
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.visualHint {
+    opacity: 0.85;
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.blocks {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 30px;
+}
+
+.block {
+    width: 100%;
+    padding: 50px;
+}
+
+.block::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    border-right: 2px solid var(--accent-cyan);
+    border-top: 2px solid var(--accent-cyan);
+    opacity: 0.5;
+}
+
+.blockTitle {
+    margin: 0;
+    font-size: 16px;
+}
+
+.blockText {
+    margin: 10px 0 0;
+    opacity: 0.88;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+@media (max-width: 900px) {
+    .heroInner {
+        grid-template-columns: 1fr;
+    }
+
+    .blocks {
+        grid-template-columns: 1fr;
+    }
+
+    .title {
+        font-size: 32px;
+    }
+}

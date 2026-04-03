@@ -1,0 +1,101 @@
+.container {
+  max-width: var(--max-width-container);
+  margin: 0 auto;
+  padding: 0 var(--padding-horizontal);
+  padding-bottom: var(--spacing-xxl);
+}
+
+.centerLayout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body-sm);
+  margin-bottom: var(--spacing-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+.backLink:hover {
+  color: var(--color-accent);
+  transform: translateX(-2px);
+}
+
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-xl);
+  border: var(--border-default);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.title {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-h3);
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-lg);
+  font-weight: var(--font-weight-bold);
+  border-bottom: 2px solid var(--color-bg);
+  padding-bottom: var(--spacing-sm);
+}
+
+.specsList {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.specRow {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-xs) 0;
+  border-bottom: 1px dashed var(--color-border);
+}
+
+.specRow:last-child {
+  border-bottom: none;
+}
+
+.specKey {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  font-size: var(--font-size-body-sm);
+}
+
+.specValue {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body-sm);
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 2px solid var(--color-bg);
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+}
+
+.priceLabel {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body-lg);
+  color: var(--color-text);
+}
+
+.priceValue {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-h3);
+  color: var(--color-accent);
+}
+
+.errorText {
+  color: var(--color-error);
+  font-weight: var(--font-weight-medium);
+}

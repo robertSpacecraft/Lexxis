@@ -1,0 +1,104 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  margin-bottom: var(--spacing-lg);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(0.75rem);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.container {
+  max-width: var(--max-width-container);
+  margin: 0 auto;
+  padding: 0 var(--padding-horizontal) 0 var(--spacing-xs);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 8rem;
+}
+
+.brandLink {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.brandLogo {
+  height: 6rem;
+  width: auto;
+  object-fit: contain;
+}
+
+.navLinks {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.navLink {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  font-size: var(--font-size-body);
+  transition: color 0.2s ease;
+}
+
+.navLink:hover, .navLink:focus {
+  color: var(--color-accent);
+}
+
+.userSection {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.2;
+}
+
+.userName {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  font-size: var(--font-size-body-sm);
+}
+
+.userEmail {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+}
+
+.btnPrimary {
+  background: var(--color-accent);
+  color: var(--color-white);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body-sm);
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btnPrimary:hover {
+  background: #e6950f;
+  transform: translateY(-1px);
+}
+
+.btnSecondary {
+  background: var(--color-surface);
+  color: var(--color-primary);
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-body-sm);
+  transition: all 0.2s ease;
+}
+
+.btnSecondary:hover {
+  background: var(--color-border);
+  color: var(--color-blue-dark);
+}

@@ -1,0 +1,106 @@
+.container {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+}
+
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-xl);
+  width: 100%;
+  max-width: 420px;
+  border: var(--border-default);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.title {
+  font-size: var(--font-size-h3);
+  font-family: var(--font-secondary);
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-xxs);
+}
+
+.subtitle {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body-sm);
+}
+
+.errorBox {
+  padding: var(--spacing-sm);
+  background: #fee2e2;
+  color: var(--color-error);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-body-sm);
+  text-align: center;
+  border: 1px solid #fca5a5;
+}
+
+.inputGroup {
+  margin-bottom: var(--spacing-md);
+}
+
+.inputLabel {
+  display: block;
+  margin-bottom: var(--spacing-xxs);
+  color: var(--color-text);
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.formInput {
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: var(--border-default);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-body);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.15);
+}
+
+.submitBtn {
+  width: 100%;
+  margin-top: var(--spacing-sm);
+  background: var(--color-accent);
+  color: var(--color-white);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body);
+  display: flex;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #e6950f;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.submitBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.demoInfo {
+  margin-top: var(--spacing-xl);
+  text-align: center;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+}
