@@ -23,7 +23,7 @@
 
 .title {
   font-size: var(--font-size-h3);
-  font-family: var(--font-secondary);
+  font-family: var(--font-titles);
   color: var(--color-primary);
   margin-bottom: var(--spacing-xxs);
 }

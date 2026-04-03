@@ -2,11 +2,11 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  margin-bottom: var(--spacing-lg);
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(0.75rem);
+  margin-bottom: var(--spacing-xxl);
+  background: var(--color-bg);
   border-bottom: 1px solid var(--color-border);
   box-shadow: var(--shadow-sm);
+  padding: var(--spacing-sm) 0;
 }
 
 .container {
@@ -16,7 +16,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 8rem;
 }
 
 .brandLink {
@@ -26,32 +25,102 @@
 }
 
 .brandLogo {
-  height: 6rem;
+  height: 7rem;
   width: auto;
   object-fit: contain;
 }
 
 .navLinks {
   display: flex;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
   align-items: center;
+  margin-left: var(--spacing-xl);
 }
 
 .navLink {
+  font-family: var(--font-body);
   font-weight: var(--font-weight-medium);
   color: var(--color-text);
   font-size: var(--font-size-body);
   transition: color 0.2s ease;
+  position: relative;
 }
 
-.navLink:hover, .navLink:focus {
+.navLink:hover,
+.navLink:focus {
   color: var(--color-accent);
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background-color: var(--color-accent);
+  transition: width 0.3s ease;
+}
+
+.navLink:hover::after {
+  width: 100%;
 }
 
 .userSection {
   display: flex;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-lg);
   align-items: center;
+  margin-left: auto;
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--color-text);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.iconWrapper:hover {
+  color: var(--color-accent);
+}
+
+.langSelector {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--color-border);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-body-sm);
+  cursor: pointer;
+  background: var(--color-bg);
+  position: relative;
+}
+
+.cartIcon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cartBadge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--color-accent);
+  color: var(--color-white);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .userInfo {
@@ -70,35 +139,4 @@
 .userEmail {
   font-size: var(--font-size-caption);
   color: var(--color-text-muted);
-}
-
-.btnPrimary {
-  background: var(--color-accent);
-  color: var(--color-white);
-  padding: var(--spacing-xs) var(--spacing-md);
-  border-radius: var(--radius-sm);
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-body-sm);
-  transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.btnPrimary:hover {
-  background: #e6950f;
-  transform: translateY(-1px);
-}
-
-.btnSecondary {
-  background: var(--color-surface);
-  color: var(--color-primary);
-  border: 1px solid var(--color-border);
-  padding: var(--spacing-xs) var(--spacing-md);
-  border-radius: var(--radius-sm);
-  font-weight: var(--font-weight-medium);
-  font-size: var(--font-size-body-sm);
-  transition: all 0.2s ease;
-}
-
-.btnSecondary:hover {
-  background: var(--color-border);
-  color: var(--color-blue-dark);
 }

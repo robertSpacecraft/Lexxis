@@ -1,69 +1,76 @@
-import Navbar from '../components/Navbar';
-import { authStorage } from '../store/authStorage';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import { catalogApi } from '../api/catalog';
+import styles from './Home.module.css';
+
+// Hero Images
+import footwearHero from '../assets/images/hero/hero_footwear_shop_1775204761637.png';
+import customPrintHero from '../assets/images/hero/hero_custom_print_1775204777415.png';
 
 export default function Home() {
-    const user = authStorage.getUser();
+    const [topProducts, setTopProducts] = useState([]);
+
+    useEffect(() => {
+        const fetchTopProducts = async () => {
+            try {
+                // Fetch top 5 products. Mocking 'top sellers' with the first 5 active items.
+                const { items } = await catalogApi.getProducts();
+                const activeItems = items.filter(t => t.is_active !== false);
+                setTopProducts(activeItems.slice(0, 5));
+            } catch (err) {
+                console.error("Failed to load top products", err);
+            }
+        };
+        fetchTopProducts();
+    }, []);
 
     return (
-        <>
+        <div className={styles.homeContainer}>
             <Navbar />
-            <div className="container">
-                <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-                    <h1 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '1rem', background: 'linear-gradient(to right, var(--primary), var(--primary-light))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                        Bienvenido a Lexxis
-                    </h1>
-                    <p className="text-muted" style={{ fontSize: '1.25rem', marginBottom: '3rem', maxWidth: '600px', margin: '0 auto 3rem' }}>
-                        Plataforma de demostración para gestión de catálogo y archivos de impresión.
-                    </p>
-
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', maxWidth: '900px', margin: '0 auto' }}>
-                        <div className="card" style={{ padding: '2rem' }}>
-                            <h2 style={{ marginBottom: '1rem', color: 'var(--primary)' }}>Catálogo Público</h2>
-                            <p className="text-muted" style={{ marginBottom: '1.5rem' }}>Explora nuestros productos y variantes disponibles sin necesidad de registro.</p>
-                            <Link to="/catalog" className="btn btn-secondary" style={{ width: '100%' }}>Ver Catálogo</Link>
+            
+            <main className={styles.mainBody}>
+                {/* Hero Dual Box */}
+                <section className={styles.heroDualBox}>
+                    <Link to="/catalog" className={styles.heroCard} style={{ backgroundImage: `url(${footwearHero}), linear-gradient(var(--color-surface), var(--color-border))` }}>
+                        <div className={styles.heroOverlay}></div>
+                        <div className={styles.heroContent}>
+                            <h2 className={styles.heroTitle}>Catálogo de Calzado 3D</h2>
+                            <div className={styles.heroSubtitle}>Descubre la nueva colección</div>
+                            <span className={styles.heroBtn}>Shop</span>
                         </div>
+                    </Link>
 
-                        <div className="card" style={{ padding: '2rem', borderColor: user ? 'var(--primary)' : 'var(--border)' }}>
-                            <h2 style={{ marginBottom: '1rem', color: user ? 'var(--primary-dark)' : 'var(--text-main)' }}>Área Privada</h2>
-                            <p className="text-muted" style={{ marginBottom: '1.5rem' }}>
-                                {user
-                                    ? `Hola, ${user.name}. Gestiona tus archivos de impresión.`
-                                    : 'Accede para gestionar tus archivos de impresión.'}
-                            </p>
-                            {user ? (
-                                <Link to="/account/printfiles" className="btn btn-primary" style={{ width: '100%' }}>Ir a mis Archivos</Link>
-                            ) : (
-                                <Link to="/login" className="btn btn-primary" style={{ width: '100%' }}>Iniciar Sesión</Link>
-                            )}
+                    <Link to="/account/printfiles" className={styles.heroCard} style={{ backgroundImage: `url(${customPrintHero}), linear-gradient(var(--color-surface), var(--color-border))` }}>
+                        <div className={styles.heroOverlay}></div>
+                        <div className={styles.heroContent}>
+                            <h2 className={styles.heroTitle}>Servicio de Impresión 3D</h2>
+                            <div className={styles.heroSubtitle}>Formatos: SLT, GCODE, OBJ</div>
+                            <span className={styles.heroBtn}>Sube tu archivo</span>
                         </div>
+                    </Link>
+                </section>
+
+                {/* Top Sellers Carousel */}
+                <section className={styles.topSellersSection}>
+                    <h3 className={styles.topSellersTitle}>Modelos más vendidos</h3>
+                    <div className={styles.carousel}>
+                        {topProducts.length > 0 ? (
+                            topProducts.map((product, index) => (
+                                <span key={product.id} className={styles.carouselItem}>
+                                    {product.name} <span className={styles.price}>- 89€</span> {/* Dummy price since price is on variants */}
+                                    {index < topProducts.length - 1 && <span style={{margin: '0 1rem', color: 'var(--color-border)'}}>|</span>}
+                                </span>
+                            ))
+                        ) : (
+                            <div className={styles.carouselItem}>Cargando modelos...</div>
+                        )}
                     </div>
+                </section>
+            </main>
 
-                    <div style={{ marginTop: '4rem', padding: '2rem', background: '#f1f5f9', borderRadius: '1rem' }}>
-                        <h3 style={{ marginBottom: '1rem' }}>Estado del Sistema</h3>
-                        <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem' }}>
-                            <div>
-                                <span className="text-muted text-sm">Estado Auth:</span>
-                                <div style={{ fontWeight: 600, color: user ? 'var(--success)' : 'var(--error)' }}>
-                                    {user ? 'Autenticado' : 'No Autenticado'}
-                                </div>
-                            </div>
-                            {user && (
-                                <>
-                                    <div>
-                                        <span className="text-muted text-sm">Usuario:</span>
-                                        <div style={{ fontWeight: 600 }}>{user.email}</div>
-                                    </div>
-                                    <div>
-                                        <span className="text-muted text-sm">Rol:</span>
-                                        <div style={{ fontWeight: 600 }}>{user.role || 'N/A'}</div>
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
+            <Footer />
+        </div>
     );
 }

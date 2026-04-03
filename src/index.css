@@ -1,4 +1,4 @@
-@import './styles/tokens.css';
+@import './styles/variables.css';
 
 /* CSS Reset & Base */
 *, *::before, *::after {
@@ -8,7 +8,7 @@
 }
 
 body {
-  font-family: var(--font-primary);
+  font-family: var(--font-body);
   background-color: var(--color-bg);
   color: var(--color-text);
   line-height: var(--line-height-body);
@@ -17,7 +17,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-secondary);
+  font-family: var(--font-titles);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-heading);
   color: var(--color-primary);
