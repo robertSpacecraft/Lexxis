@@ -85,12 +85,22 @@ async function request(endpoint, { method = 'GET', body, headers = {}, responseT
 
         return resultData;
     } catch (error) {
-        // En caso de que se haya lanzado un objeto personalizado desde arriba (ej. error 400), lo propagamos.
-        // Solo envolveremos los fallos genuinos de red (ej: fetch fallido), donde error es una instancia de TypeError/Error y no tiene status custom.
         if (error && error.status !== undefined) {
             return Promise.reject(error);
         }
-        return Promise.reject({ status: 0, message: 'Error de red o conexión', errors: null, original: error });
+        
+        // Handle common CORS/Redirect issues (status 0)
+        const isPotentialRedirect = error instanceof TypeError && error.message === 'Failed to fetch';
+        const msg = isPotentialRedirect 
+            ? 'Error de conexión o conflicto de sesión (CORS/Redirect). Prueba a limpiar cookies.'
+            : 'Error de red o conexión';
+
+        return Promise.reject({ 
+            status: 0, 
+            message: msg, 
+            errors: null, 
+            original: error 
+        });
     }
 }
 

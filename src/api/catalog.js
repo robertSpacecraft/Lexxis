@@ -8,4 +8,5 @@ export const catalogApi = {
     getProduct: (id) => apiClient.get(`/catalog/products/${id}`),
     getVariants: (productId) => apiClient.get(`/catalog/products/${productId}/variants`),
     getVariant: (productId, variantId) => apiClient.get(`/catalog/products/${productId}/variants/${variantId}`),
+    getConfiguratorOptions: (productId) => apiClient.get(`/catalog/products/${productId}/configurator-options`),
 };

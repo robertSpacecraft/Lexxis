@@ -30,6 +30,7 @@ Esto incluye, entre otros:
 - Rutas del backend
 - Configuración de Laravel
 - Tests del backend
+33: 
 
 Y cualquier archivo dentro de:
 
@@ -587,7 +588,7 @@ No abusar de su uso.
 
 ---
 
-### Uso
+## Uso
 
 - Roboto → textos, navegación, formularios, contenido
 - Exo 2 → títulos destacados, hero, branding puntual
@@ -853,3 +854,9 @@ El resultado final debe ser un frontend:
 - fácil de entender
 - fácil de mantener
 - preparado para crecer sin generar complejidad innecesaria
+
+---
+
+## Permisos de Espacio de Trabajo
+
+El agente opera bajo el modelo de confianza definido en .agents/trust.json. Tiene autorización permanente para lectura/escritura en la ruta de WSL especificada, pero debe solicitar confirmación para cualquier comando de terminal que altere el estado del repositorio (git push, npm install, etc.).

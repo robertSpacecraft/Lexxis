@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { authApi } from '../api/auth';
 import { authStorage } from '../store/authStorage';
 import Navbar from '../components/Navbar';
@@ -9,7 +9,10 @@ export default function Login() {
     const [credentials, setCredentials] = useState({ email: 'demo@lexxis.test', password: 'password' });
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+    const location = useLocation();
     const navigate = useNavigate();
+
+    const fromParams = location.state?.from || '/';
 
     const handleChange = (e) => {
         setCredentials(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -26,7 +29,7 @@ export default function Login() {
             if (result.token) {
                 authStorage.setToken(result.token);
                 authStorage.setUser(result.user);
-                navigate('/');
+                navigate(fromParams);
             } else {
                 setError('Respuesta inválida del servidor');
             }

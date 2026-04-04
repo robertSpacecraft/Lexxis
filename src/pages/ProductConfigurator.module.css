@@ -1,0 +1,192 @@
+.container {
+  max-width: var(--max-width-container);
+  margin: 0 auto;
+  padding: 0 var(--padding-horizontal);
+  padding-bottom: var(--spacing-xxl);
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body-sm);
+  margin-bottom: var(--spacing-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+.backLink:hover {
+  color: var(--color-accent);
+  transform: translateX(-2px);
+}
+
+.title {
+  font-family: var(--font-titles);
+  font-size: var(--font-size-h2);
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-lg);
+  font-weight: var(--font-weight-bold);
+  border-bottom: 2px solid var(--color-bg);
+  padding-bottom: var(--spacing-sm);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+}
+
+@media (max-width: 768px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.previewSection {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  border: var(--border-default);
+}
+
+.previewImage {
+  max-width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+}
+
+.placeholderImage {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.configSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.fieldLabel {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  font-size: var(--font-size-body);
+}
+
+.selectInput {
+  padding: var(--spacing-sm);
+  border: var(--border-default);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  background: var(--color-bg);
+  color: var(--color-text);
+  outline: none;
+}
+
+.selectInput:focus {
+  border-color: var(--color-primary);
+}
+
+.selectInput:disabled {
+  background: var(--color-surface);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.actions {
+  margin-top: var(--spacing-xl);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.btnPrimary {
+  background: var(--color-accent);
+  color: var(--color-white);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+}
+
+.btnPrimary:hover {
+  background: #e6950f;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btnPrimary:disabled {
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.successActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  text-align: center;
+}
+
+.successText {
+  color: var(--color-success);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body-lg);
+}
+
+.btnSecondary {
+  background: var(--color-surface);
+  color: var(--color-primary);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  width: 100%;
+  cursor: pointer;
+}
+
+.btnSecondary:hover {
+  background: var(--color-border);
+  color: var(--color-primary);
+}
+
+.centerLayout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+.errorText {
+  color: var(--color-error);
+  font-weight: var(--font-weight-medium);
+}

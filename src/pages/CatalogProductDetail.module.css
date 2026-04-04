@@ -76,27 +76,87 @@
   font-size: var(--font-size-body-sm);
 }
 
-.actions {
+.pathContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+@media (max-width: 640px) {
+  .pathContainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pathCard {
+  background: var(--color-bg);
+  border: var(--border-default);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
   display: flex;
-  gap: var(--spacing-md);
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pathCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
+}
+
+.pathTitle {
+  font-family: var(--font-titles);
+  color: var(--color-primary);
+  font-size: var(--font-size-h4);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-xs);
+}
+
+.pathDesc {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body-sm);
+  margin-bottom: var(--spacing-lg);
+  flex-grow: 1;
 }
 
 .btnPrimary {
   background: var(--color-accent);
   color: var(--color-white);
-  padding: var(--spacing-sm) var(--spacing-lg);
+  padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--radius-md);
   font-weight: var(--font-weight-bold);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
+  width: 100%;
 }
 
 .btnPrimary:hover {
   background: #e6950f;
   transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
+}
+
+.btnSecondary {
+  background: var(--color-surface);
+  color: var(--color-primary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  font-weight: var(--font-weight-bold);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.btnSecondary:hover {
+  background: var(--color-border);
+  color: var(--color-primary);
 }
 
 .errorText {

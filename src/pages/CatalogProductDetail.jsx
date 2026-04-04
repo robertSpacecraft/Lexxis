@@ -68,10 +68,22 @@ export default function CatalogProductDetail() {
                         })}
                     </div>
 
-                    <div className={styles.actions}>
-                        <Link to={`/catalog/products/${product.id}/variants`} className={styles.btnPrimary}>
-                            Ver Variantes
-                        </Link>
+                    <div className={styles.pathContainer}>
+                        <div className={styles.pathCard}>
+                            <h3 className={styles.pathTitle}>Variantes de catálogo</h3>
+                            <p className={styles.pathDesc}>Elige entre las combinaciones ya fabricadas y listas para enviar.</p>
+                            <Link to={`/catalog/products/${product.id}/variants`} className={styles.btnSecondary}>
+                                Ver Variantes
+                            </Link>
+                        </div>
+                        
+                        <div className={styles.pathCard}>
+                            <h3 className={styles.pathTitle}>Diseño personalizado</h3>
+                            <p className={styles.pathDesc}>Configura materiales, colores y tallas a tu medida.</p>
+                            <Link to={`/catalog/products/${product.id}/design`} className={styles.btnPrimary}>
+                                Diseñar Variante
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>

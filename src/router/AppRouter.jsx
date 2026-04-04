@@ -5,6 +5,7 @@ import CatalogProducts from '../pages/CatalogProducts';
 import CatalogProductDetail from '../pages/CatalogProductDetail';
 import CatalogVariants from '../pages/CatalogVariants';
 import CatalogVariantDetail from '../pages/CatalogVariantDetail';
+import ProductConfigurator from '../pages/ProductConfigurator';
 import PrintFiles from '../pages/PrintFiles';
 import ProtectedRoute from '../components/ProtectedRoute';
 
@@ -21,8 +22,9 @@ export default function AppRouter() {
             <Route path="/catalog/products/:productId/variants/:variantId" element={<CatalogVariantDetail />} />
 
             {/* Protected Routes */}
-            <Route path="/account" element={<ProtectedRoute />}>
-                <Route path="printfiles" element={<PrintFiles />} />
+            <Route element={<ProtectedRoute />}>
+                <Route path="/catalog/products/:productId/design" element={<ProductConfigurator />} />
+                <Route path="/account/printfiles" element={<PrintFiles />} />
             </Route>
 
             {/* Fallback */}
