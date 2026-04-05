@@ -1,0 +1,133 @@
+.title {
+    font-size: var(--font-size-heading-lg);
+    color: var(--color-text);
+    margin-bottom: 2rem;
+    font-weight: 600;
+}
+
+.centerSpinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    color: var(--color-text-secondary);
+}
+
+.emptyState {
+    text-align: center;
+    padding: 3rem;
+    background-color: var(--color-background);
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--color-border);
+    color: var(--color-text-secondary);
+}
+
+.cartLayout {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.itemsList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.cartItem {
+    display: flex;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    background-color: var(--color-surface);
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.itemImage {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-background);
+}
+
+.itemDetails {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.itemName {
+    font-weight: 600;
+    font-size: var(--font-size-heading-sm);
+}
+
+.itemMeta {
+    font-size: var(--font-size-body-sm);
+    color: var(--color-text-secondary);
+}
+
+.itemPrice {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--color-primary);
+}
+
+.itemQuantity {
+    font-size: var(--font-size-body-sm);
+    color: var(--color-text-secondary);
+    padding: 0.5rem;
+    background-color: var(--color-background);
+    border-radius: var(--radius-sm);
+    text-align: center;
+    min-width: 80px;
+}
+
+.summaryCard {
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    background-color: rgba(99, 102, 241, 0.02);
+    align-self: flex-end;
+    width: 300px;
+}
+
+.summaryTitle {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.summaryRow {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.btnCheckout {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btnCheckout:hover {
+    background-color: var(--color-primary-hover);
+}
+
+.limitMessage {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    margin-top: 1rem;
+    text-align: center;
+    font-style: italic;
+}

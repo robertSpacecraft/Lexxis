@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { printFilesApi } from '../api/printFiles';
-import Navbar from '../components/Navbar';
 import styles from './PrintFiles.module.css';
 
 export default function PrintFiles() {
@@ -84,10 +83,8 @@ export default function PrintFiles() {
     };
 
     return (
-        <>
-            <Navbar />
-            <div className={styles.container}>
-                <h1 className={styles.title}>Mis Archivos de Impresión</h1>
+        <div>
+            <h1 className={styles.title}>Mis Archivos de Impresión</h1>
 
                 <div className={styles.layout}>
                     {/* Upload Form */}
@@ -179,7 +176,6 @@ export default function PrintFiles() {
                         )}
                     </div>
                 </div>
-            </div>
-        </>
+        </div>
     );
 }

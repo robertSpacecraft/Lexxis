@@ -10,8 +10,28 @@
   margin: 0 auto;
   padding: 0 var(--padding-horizontal);
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  gap: var(--spacing-md);
+}
+
+.socialLinks {
+  display: flex;
+  gap: var(--spacing-lg);
+  align-items: center;
+}
+
+.socialLink {
+  color: var(--color-primary);
+  transition: color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.socialLink:hover {
+  color: var(--color-accent);
+  transform: translateY(-2px);
 }
 
 .copyright {

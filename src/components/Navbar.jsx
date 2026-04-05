@@ -41,11 +41,11 @@ export default function Navbar() {
                 </Link>
 
                 <div className={styles.navLinks}>
-                    <Link to="/#" className={styles.navLink}>Actualidad</Link>
+                    <Link to="/news" className={styles.navLink}>Actualidad</Link>
                     <Link to="/catalog" className={styles.navLink}>Shop</Link>
                     <Link to="/#" className={styles.navLink}>Servicios</Link>
-                    <Link to="/#" className={styles.navLink}>Quiénes somos</Link>
-                    <Link to="/#" className={styles.navLink}>Contacto</Link>
+                    <Link to="/about" className={styles.navLink}>Quiénes somos</Link>
+                    <Link to="/contact" className={styles.navLink}>Contacto</Link>
                 </div>
 
                 <div className={styles.userSection}>
@@ -53,7 +53,7 @@ export default function Navbar() {
                         ES <DropdownArrow />
                     </div>
 
-                    <Link to="/catalog" className={styles.iconWrapper}>
+                    <Link to="/account/cart" className={styles.iconWrapper}>
                         <div className={styles.cartIcon}>
                             <CartIcon />
                             <span className={styles.cartBadge}>0</span>
@@ -62,10 +62,10 @@ export default function Navbar() {
 
                     {user ? (
                         <>
-                            <div className={styles.userInfo}>
+                            <Link to="/account" className={styles.userInfo} style={{textDecoration:'none', color:'inherit'}}>
                                 <span className={styles.userName}>{user.name}</span>
                                 <span className={styles.userEmail}>{user.email}</span>
-                            </div>
+                            </Link>
                             <div className={styles.iconWrapper} onClick={handleLogout} title="Cerrar sesión">
                                 Cerrar Sesión
                             </div>
