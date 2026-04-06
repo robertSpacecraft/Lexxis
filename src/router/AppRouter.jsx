@@ -20,6 +20,8 @@ import PrintJobConfig from '../pages/account/PrintJobConfig';
 import MyPrintJobs from '../pages/account/MyPrintJobs';
 import PrintFileDetail from '../pages/account/PrintFileDetail';
 import PrintFileConfigure from '../pages/account/PrintFileConfigure';
+import Orders from '../pages/account/Orders';
+import OrderDetail from '../pages/account/OrderDetail';
 import ServicePrint3D from '../pages/ServicePrint3D';
 
 export default function AppRouter() {
@@ -53,6 +55,8 @@ export default function AppRouter() {
                     <Route path="printfiles/:printFileId/configure" element={<PrintFileConfigure />} />
                     <Route path="printjobs" element={<MyPrintJobs />} />
                     <Route path="printfiles/:printFileId/jobs/:printJobId" element={<PrintJobConfig />} />
+                    <Route path="orders" element={<Orders />} />
+                    <Route path="orders/:orderId" element={<OrderDetail />} />
                 </Route>
             </Route>
 

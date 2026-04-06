@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { catalogApi } from '../api/catalog';
+import { getImageUrl } from '../utils/imageMapper';
 import Navbar from '../components/Navbar';
 import styles from './CatalogVariants.module.css';
 
@@ -58,6 +59,19 @@ export default function CatalogVariants() {
                     <div className={styles.grid}>
                         {variants.map(variant => (
                             <Link key={variant.id} to={`/catalog/products/${productId}/variants/${variant.id}`} className={styles.card}>
+                                <div className={styles.imageContainer}>
+                                    {variant.main_image ? (
+                                        <img 
+                                            src={getImageUrl(variant.main_image)} 
+                                            alt={`Variante ${variant.sku}`} 
+                                            className={styles.variantImage} 
+                                        />
+                                    ) : (
+                                        <div className={styles.imagePlaceholder}>
+                                            <span>Sin imagen</span>
+                                        </div>
+                                    )}
+                                </div>
                                 <div className={styles.cardContent}>
                                     <h3 className={styles.variantSku}>SKU: {variant.sku || 'N/A'}</h3>
 

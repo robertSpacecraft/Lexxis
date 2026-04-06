@@ -29,6 +29,12 @@ export default function AccountLayout() {
                         Mi Carrito
                     </NavLink>
                     <NavLink 
+                        to="/account/orders" 
+                        className={({ isActive }) => isActive ? `${styles.navLink} ${styles.navLinkActive}` : styles.navLink}
+                    >
+                        Mis Pedidos
+                    </NavLink>
+                    <NavLink 
                         to="/account/printfiles" 
                         className={({ isActive }) => isActive ? `${styles.navLink} ${styles.navLinkActive}` : styles.navLink}
                     >

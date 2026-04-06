@@ -27,24 +27,50 @@
   transform: translateX(-2px);
 }
 
-.card {
+.productLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
   background: var(--color-surface);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
   padding: var(--spacing-xl);
   border: var(--border-default);
-  max-width: 800px;
-  margin: 0 auto;
+  box-shadow: var(--shadow-sm);
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .productLayout {
+    grid-template-columns: 1fr;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
+
+.mediaColumn {
+  width: 100%;
+}
+
+.infoColumn {
+  display: flex;
+  flex-direction: column;
 }
 
 .title {
   font-family: var(--font-titles);
   font-size: var(--font-size-h2);
   color: var(--color-primary);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
   font-weight: var(--font-weight-bold);
   border-bottom: 2px solid var(--color-bg);
   padding-bottom: var(--spacing-sm);
+}
+
+.description {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  margin-bottom: var(--spacing-lg);
 }
 
 .specsList {

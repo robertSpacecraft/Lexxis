@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { catalogApi } from '../api/catalog';
+import ImageGallery from '../components/ImageGallery';
 import Navbar from '../components/Navbar';
 import styles from './CatalogProductDetail.module.css';
 
@@ -51,38 +52,53 @@ export default function CatalogProductDetail() {
                     <span>&larr;</span> Volver al catálogo
                 </Link>
 
-                <div className={styles.card}>
-                    <h1 className={styles.title}>{product.name}</h1>
-
-                    <div className={styles.specsList}>
-                        {Object.entries(product).map(([key, value]) => {
-                            if (['id', 'name', 'created_at', 'updated_at'].includes(key)) return null;
-                            if (typeof value === 'object') return null;
-
-                            return (
-                                <div key={key} className={styles.specRow}>
-                                    <span className={styles.specKey}>{key.replace(/_/g, ' ')}</span>
-                                    <span className={styles.specValue}>{String(value)}</span>
-                                </div>
-                            );
-                        })}
+                <div className={styles.productLayout}>
+                    <div className={styles.mediaColumn}>
+                        <ImageGallery 
+                            mainImage={product.main_image} 
+                            images={product.images} 
+                            fallbackAlt={product.name}
+                        />
                     </div>
 
-                    <div className={styles.pathContainer}>
-                        <div className={styles.pathCard}>
-                            <h3 className={styles.pathTitle}>Variantes de catálogo</h3>
-                            <p className={styles.pathDesc}>Elige entre las combinaciones ya fabricadas y listas para enviar.</p>
-                            <Link to={`/catalog/products/${product.id}/variants`} className={styles.btnSecondary}>
-                                Ver Variantes
-                            </Link>
-                        </div>
+                    <div className={styles.infoColumn}>
+                        <h1 className={styles.title}>{product.name}</h1>
                         
-                        <div className={styles.pathCard}>
-                            <h3 className={styles.pathTitle}>Diseño personalizado</h3>
-                            <p className={styles.pathDesc}>Configura materiales, colores y tallas a tu medida.</p>
-                            <Link to={`/catalog/products/${product.id}/design`} className={styles.btnPrimary}>
-                                Diseñar Variante
-                            </Link>
+                        {product.description && (
+                            <p className={styles.description}>{product.description}</p>
+                        )}
+
+                        <div className={styles.specsList}>
+                            {product.slug && (
+                                <div className={styles.specRow}>
+                                    <span className={styles.specKey}>Slug</span>
+                                    <span className={styles.specValue}>{product.slug}</span>
+                                </div>
+                            )}
+                            {product.category?.name && (
+                                <div className={styles.specRow}>
+                                    <span className={styles.specKey}>Categoría</span>
+                                    <span className={styles.specValue}>{product.category.name}</span>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className={styles.pathContainer}>
+                            <div className={styles.pathCard}>
+                                <h3 className={styles.pathTitle}>Variantes de catálogo</h3>
+                                <p className={styles.pathDesc}>Elige entre las combinaciones ya fabricadas.</p>
+                                <Link to={`/catalog/products/${product.id}/variants`} className={styles.btnSecondary}>
+                                    Ver Variantes
+                                </Link>
+                            </div>
+                            
+                            <div className={styles.pathCard}>
+                                <h3 className={styles.pathTitle}>Diseño personalizado</h3>
+                                <p className={styles.pathDesc}>Configura materiales, colores y tallas a medida.</p>
+                                <Link to={`/catalog/products/${product.id}/design`} className={styles.btnPrimary}>
+                                    Diseñar Variante
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>

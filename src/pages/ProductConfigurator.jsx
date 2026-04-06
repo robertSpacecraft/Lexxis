@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { catalogApi } from '../api/catalog';
 import { designApi } from '../api/designApi';
+import { cartApi } from '../api/cartApi';
 import { authStorage } from '../store/authStorage';
 import Navbar from '../components/Navbar';
 import styles from './ProductConfigurator.module.css';
@@ -16,6 +17,9 @@ export default function ProductConfigurator() {
     const [error, setError] = useState(null);
     const [saving, setSaving] = useState(false);
     const [savedDesignId, setSavedDesignId] = useState(null);
+    const [addingToCart, setAddingToCart] = useState(false);
+    const [addedToCart, setAddedToCart] = useState(false);
+    const [cartError, setCartError] = useState(null);
 
     // Configurations
     const [selectedMaterial, setSelectedMaterial] = useState('');
@@ -87,6 +91,24 @@ export default function ProductConfigurator() {
         }
     };
 
+    const handleAddToCart = async () => {
+        if (!savedDesignId) return;
+        
+        setAddingToCart(true);
+        setCartError(null);
+        try {
+            await cartApi.addProductDesign(savedDesignId, 1);
+            setAddedToCart(true);
+            // Notify Navbar to refresh cart count
+            window.dispatchEvent(new CustomEvent('lexxis-cart-updated'));
+        } catch (err) {
+            console.error(err);
+            setCartError(err.message || 'Error al añadir diseño al carrito.');
+        } finally {
+            setAddingToCart(false);
+        }
+    };
+
     if (loading) return (
         <>
             <Navbar />
@@ -114,17 +136,28 @@ export default function ProductConfigurator() {
 
     // Determine what image to show
     let previewImage = null;
+    
+    // 1. Exact preview variant match
     if (preview_variants?.length > 0 && selectedMaterial && selectedColor) {
         const exactPreview = preview_variants.find(
             pv => String(pv.material_id) === String(selectedMaterial) && pv.color_name === selectedColor
         );
-        if (exactPreview?.image_url) {
-            previewImage = exactPreview.image_url;
+        if (exactPreview?.main_image?.url) {
+            previewImage = exactPreview.main_image.url;
         }
     }
-    // Fallback
-    if (!previewImage && product?.main_image) {
-        previewImage = product.main_image;
+    
+    // 2. Selected color preview image fallback
+    if (!previewImage && selectedColor) {
+        const colorObj = availableColors.find(c => (typeof c === 'string' ? c : c.name) === selectedColor);
+        if (colorObj?.preview_image?.url) {
+            previewImage = colorObj.preview_image.url;
+        }
+    }
+
+    // 3. Product main image fallback
+    if (!previewImage && product?.main_image?.url) {
+        previewImage = product.main_image.url;
     }
 
     return (
@@ -215,12 +248,27 @@ export default function ProductConfigurator() {
                             ) : (
                                 <div className={styles.successActions}>
                                     <p className={styles.successText}>¡Diseño guardado correctamente!</p>
-                                    <button 
-                                        className={styles.btnSecondary}
-                                        onClick={() => alert("Próximamente: Integración con carrito terminada")}
-                                    >
-                                        Añadir al carrito
-                                    </button>
+                                    
+                                    {cartError && (
+                                        <p className={styles.errorText} style={{ marginBottom: 'var(--spacing-sm)' }}>{cartError}</p>
+                                    )}
+
+                                    {addedToCart ? (
+                                        <button 
+                                            className={styles.btnSecondary}
+                                            onClick={() => navigate('/account/cart')}
+                                        >
+                                            Ir al carrito
+                                        </button>
+                                    ) : (
+                                        <button 
+                                            className={styles.btnPrimary}
+                                            disabled={addingToCart}
+                                            onClick={handleAddToCart}
+                                        >
+                                            {addingToCart ? "Añadiendo..." : "Añadir al carrito"}
+                                        </button>
+                                    )}
                                 </div>
                             )}
                         </div>

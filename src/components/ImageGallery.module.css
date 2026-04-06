@@ -1,0 +1,78 @@
+/**
+ * Image Gallery CSS Module
+ */
+
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+.mainImageWrapper {
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  max-height: 500px;
+  width: 100%;
+}
+
+.mainImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: opacity 0.3s ease;
+}
+
+.thumbnails {
+  display: flex;
+  gap: var(--spacing-sm);
+  overflow-x: auto;
+  padding-bottom: var(--spacing-xs);
+  -webkit-overflow-scrolling: touch;
+}
+
+.thumbnailBtn {
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  cursor: pointer;
+  flex: 0 0 60px;
+  height: 60px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.activeThumbnail {
+  border-color: var(--color-accent);
+  background: var(--color-surface);
+  box-shadow: 0 0 0 1px var(--color-accent);
+}
+
+.thumbnailImg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.emptyGallery {
+  background: var(--color-surface);
+  border: var(--border-default);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-medium);
+}

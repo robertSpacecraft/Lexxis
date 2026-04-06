@@ -27,14 +27,31 @@
   transform: translateX(-2px);
 }
 
-.card {
+.variantLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
   background: var(--color-surface);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
   padding: var(--spacing-xl);
   border: var(--border-default);
-  max-width: 600px;
-  margin: 0 auto;
+  box-shadow: var(--shadow-sm);
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .variantLayout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mediaColumn {
+  width: 100%;
+}
+
+.infoColumn {
+  display: flex;
+  flex-direction: column;
 }
 
 .title {
@@ -98,4 +115,71 @@
 .errorText {
   color: var(--color-error);
   font-weight: var(--font-weight-medium);
+}
+
+/* Cart actions */
+.cartActions {
+  margin-top: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.cartError {
+  color: var(--color-error);
+  font-size: var(--font-size-body-sm);
+  margin: 0;
+}
+
+.cartSuccess {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  font-size: var(--font-size-body-sm);
+  color: var(--color-success);
+  font-weight: var(--font-weight-medium);
+}
+
+.btnPrimary {
+  width: 100%;
+  padding: var(--spacing-md);
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-titles);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background-color: #e6950f;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btnPrimary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btnSecondary {
+  padding: var(--spacing-xs) var(--spacing-md);
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  font-family: var(--font-titles);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btnSecondary:hover {
+  background-color: var(--color-surface);
 }

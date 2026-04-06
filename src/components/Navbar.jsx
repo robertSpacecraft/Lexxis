@@ -1,5 +1,7 @@
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { authStorage } from '../store/authStorage';
+import { cartApi } from '../api/cartApi';
 import styles from './Navbar.module.css';
 import logoUrl from '../assets/images/brand/Logo_Lexxis_versión_simplificada_horizontal-removebg-preview.png';
 
@@ -27,6 +29,28 @@ const UserIcon = () => (
 export default function Navbar() {
     const navigate = useNavigate();
     const user = authStorage.getUser();
+    const [cartCount, setCartCount] = useState(0);
+
+    const fetchCartCount = useCallback(async () => {
+        try {
+            const data = await cartApi.getCart();
+            const items = data?.items || [];
+            setCartCount(items.length);
+        } catch (err) {
+            console.error('Error fetching cart count:', err);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchCartCount();
+
+        const handleUpdate = () => {
+            fetchCartCount();
+        };
+
+        window.addEventListener('lexxis-cart-updated', handleUpdate);
+        return () => window.removeEventListener('lexxis-cart-updated', handleUpdate);
+    }, [fetchCartCount]);
 
     const handleLogout = () => {
         authStorage.clear();
@@ -56,7 +80,9 @@ export default function Navbar() {
                     <Link to="/account/cart" className={styles.iconWrapper}>
                         <div className={styles.cartIcon}>
                             <CartIcon />
-                            <span className={styles.cartBadge}>0</span>
+                            {cartCount > 0 && (
+                                <span className={styles.cartBadge}>{cartCount}</span>
+                            )}
                         </div>
                     </Link>
 

@@ -127,9 +127,11 @@ export default function PrintJobConfig() {
         if (!job || job.status !== 'priced') return;
         setSaving(true);
         try {
-            await cartApi.addPrintJob(job.id);
+            await cartApi.addPrintJob(job.id, 1);
+            // Refetch job so backend confirms in_cart status and UI updates correctly
+            const updatedJob = await printJobsApi.getPrintJob(printFileId, printJobId);
+            setJob(updatedJob);
             setToastMessage('Añadido al carrito con éxito');
-            // Remove automatic redirect
         } catch (err) {
             console.error(err);
             setError(err.message || 'Error al añadir al carrito.');

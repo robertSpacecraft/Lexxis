@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { catalogApi } from '../api/catalog';
+import { getImageUrl } from '../utils/imageMapper';
 import Navbar from '../components/Navbar';
 import styles from './CatalogProducts.module.css';
 
@@ -54,6 +55,19 @@ export default function CatalogProducts() {
                     <div className={styles.grid}>
                         {products.map(product => (
                             <Link key={product.id} to={`/catalog/products/${product.id}`} className={styles.card}>
+                                <div className={styles.imageContainer}>
+                                    {product.main_image ? (
+                                        <img 
+                                            src={getImageUrl(product.main_image)} 
+                                            alt={product.name} 
+                                            className={styles.productImage} 
+                                        />
+                                    ) : (
+                                        <div className={styles.imagePlaceholder}>
+                                            <span>Sin imagen</span>
+                                        </div>
+                                    )}
+                                </div>
                                 <div className={styles.cardContent}>
                                     <h2 className={styles.productName}>{product.name}</h2>
                                     {product.slug && <p className={styles.productSlug}>{product.slug}</p>}
