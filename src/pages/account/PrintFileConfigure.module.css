@@ -1,0 +1,317 @@
+/* ============================================
+   PrintFileConfigure.module.css
+   Usa únicamente los tokens definidos en tokens.css
+   ============================================ */
+
+.container {
+  max-width: var(--max-width-container);
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--padding-horizontal);
+}
+
+.backLink {
+  display: inline-block;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: var(--font-size-body-sm);
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: var(--color-primary);
+}
+
+.title {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-h2);
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.subtitle {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xl);
+}
+
+/* Layout principal: dos columnas en desktop */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xxl);
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tarjeta genérica */
+.card {
+  background-color: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.sectionTitle {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-h3);
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 2px solid var(--color-border);
+}
+
+/* ============================================
+   Bloque A — Información del archivo (solo lectura)
+   ============================================ */
+
+.infoList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.infoItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xs) 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-size-body-sm);
+}
+
+.infoItem:last-child {
+  border-bottom: none;
+}
+
+.infoLabel {
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+}
+
+.infoValue {
+  color: var(--color-text);
+  text-align: right;
+}
+
+.infoValueNull {
+  color: var(--color-text-muted);
+  font-style: italic;
+  text-align: right;
+}
+
+/* Badge revisión manual */
+.reviewBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background-color: #fff3e0;
+  border: 1px solid #ffcc80;
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-body-sm);
+  color: var(--color-warning);
+  font-weight: var(--font-weight-medium);
+  margin-top: var(--spacing-md);
+}
+
+.reviewReasons {
+  margin-top: var(--spacing-sm);
+  padding-left: var(--spacing-md);
+  font-size: var(--font-size-body-sm);
+  color: var(--color-text-muted);
+}
+
+.reviewReasons li {
+  margin-bottom: var(--spacing-xxs);
+}
+
+/* ============================================
+   Bloque B — Formulario
+   ============================================ */
+
+.formGroup {
+  margin-bottom: var(--spacing-md);
+}
+
+.label {
+  display: block;
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-xxs);
+}
+
+.labelOptional {
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+  margin-left: var(--spacing-xxs);
+}
+
+.selectInput,
+.numberInput,
+.textInput {
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-body);
+  background-color: var(--color-bg);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.selectInput:focus,
+.numberInput:focus,
+.textInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(20, 33, 61, 0.1);
+}
+
+.selectInput:disabled,
+.numberInput:disabled,
+.textInput:disabled {
+  background-color: #f5f5f5;
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+.fieldHint {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-xxs);
+}
+
+/* Error inline de validación */
+.fieldError {
+  font-size: var(--font-size-caption);
+  color: var(--color-error);
+  margin-top: var(--spacing-xxs);
+}
+
+/* ============================================
+   Botones
+   ============================================ */
+
+.btnPrimary {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  border: none;
+  padding: var(--spacing-md);
+  width: 100%;
+  border-radius: var(--radius-md);
+  font-family: var(--font-secondary);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  margin-top: var(--spacing-lg);
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background-color: #e6950f;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btnPrimary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btnSecondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  width: 100%;
+  border-radius: var(--radius-md);
+  font-family: var(--font-secondary);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body-sm);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: var(--spacing-sm);
+}
+
+.btnSecondary:hover:not(:disabled) {
+  background-color: var(--color-surface);
+}
+
+.btnSecondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Resultado del job creado
+   ============================================ */
+
+.resultBox {
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
+}
+
+.resultBoxPriced {
+  background-color: #e8f5e9;
+  border: 1px solid #a5d6a7;
+}
+
+.resultBoxReview {
+  background-color: #fff3e0;
+  border: 1px solid #ffcc80;
+}
+
+.resultTitle {
+  font-family: var(--font-secondary);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-h4);
+  margin-bottom: var(--spacing-xs);
+}
+
+.resultTitlePriced {
+  color: var(--color-success);
+}
+
+.resultTitleReview {
+  color: var(--color-warning);
+}
+
+.resultText {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* ============================================
+   Estados: error global, loading
+   ============================================ */
+
+.errorBox {
+  background-color: #ffebee;
+  border: 1px solid #ef9a9a;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  color: var(--color-error);
+  font-size: var(--font-size-body-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.loadingText {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body);
+  padding: var(--spacing-xl) 0;
+  text-align: center;
+}

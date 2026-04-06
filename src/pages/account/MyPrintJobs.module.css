@@ -1,0 +1,163 @@
+/* ============================================
+   MyPrintJobs.module.css
+   Usa únicamente tokens definidos en tokens.css
+   ============================================ */
+
+.container {
+  max-width: var(--max-width-container);
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--padding-horizontal);
+}
+
+.title {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-h2);
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.subtitle {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body);
+  margin-bottom: var(--spacing-xl);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xxl);
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background-color: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Variantes de título de sección por estado */
+.sectionTitle {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-h3);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 2px solid transparent;
+}
+
+.sectionTitlePriced {
+  color: var(--color-success);
+  border-bottom-color: var(--color-success);
+}
+
+.sectionTitleReview {
+  color: var(--color-warning);
+  border-bottom-color: var(--color-warning);
+}
+
+/* Lista de jobs */
+.jobList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.jobItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-sm);
+}
+
+.jobItemPriced {
+  border: 1px solid var(--color-success);
+}
+
+.jobItemReview {
+  border: 1px solid var(--color-warning);
+  background-color: #fffdfaa3;
+}
+
+.jobMeta {
+  flex: 1;
+  min-width: 0;
+}
+
+.jobTitle {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jobPrice {
+  font-size: var(--font-size-h4);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin-top: var(--spacing-xxs);
+}
+
+.jobNote {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-xxs);
+}
+
+.emptyText {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body-sm);
+}
+
+/* Error */
+.errorText {
+  color: var(--color-error);
+  font-size: var(--font-size-body);
+}
+
+/* Botones */
+.btnPrimary {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-family: var(--font-secondary);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.btnPrimary:hover {
+  background-color: #e6950f;
+  transform: translateY(-1px);
+}
+
+.btnSecondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-family: var(--font-secondary);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.btnSecondary:hover {
+  background-color: var(--color-surface);
+}

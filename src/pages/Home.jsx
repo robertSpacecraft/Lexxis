@@ -42,7 +42,7 @@ export default function Home() {
                         </div>
                     </Link>
 
-                    <Link to="/account/printfiles" className={styles.heroCard} style={{ backgroundImage: `url(${customPrintHero}), linear-gradient(var(--color-surface), var(--color-border))` }}>
+                    <Link to="/services/print3d" className={styles.heroCard} style={{ backgroundImage: `url(${customPrintHero}), linear-gradient(var(--color-surface), var(--color-border))` }}>
                         <div className={styles.heroOverlay}></div>
                         <div className={styles.heroContent}>
                             <h2 className={styles.heroTitle}>Servicio de Impresión 3D</h2>

@@ -108,6 +108,7 @@ export const apiClient = {
     get: (endpoint, customConfig = {}) => request(endpoint, { ...customConfig, method: 'GET' }),
     post: (endpoint, body, customConfig = {}) => request(endpoint, { ...customConfig, method: 'POST', body }),
     put: (endpoint, body, customConfig = {}) => request(endpoint, { ...customConfig, method: 'PUT', body }),
+    patch: (endpoint, body, customConfig = {}) => request(endpoint, { ...customConfig, method: 'PATCH', body }),
     delete: (endpoint, customConfig = {}) => request(endpoint, { ...customConfig, method: 'DELETE' }),
     getCsrfCookie: async () => {
         await fetch(SANCTUM_URL, { credentials: 'include' });

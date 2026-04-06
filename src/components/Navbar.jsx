@@ -43,7 +43,7 @@ export default function Navbar() {
                 <div className={styles.navLinks}>
                     <Link to="/news" className={styles.navLink}>Actualidad</Link>
                     <Link to="/catalog" className={styles.navLink}>Shop</Link>
-                    <Link to="/#" className={styles.navLink}>Servicios</Link>
+                    <Link to="/services/print3d" className={styles.navLink}>Servicios</Link>
                     <Link to="/about" className={styles.navLink}>Quiénes somos</Link>
                     <Link to="/contact" className={styles.navLink}>Contacto</Link>
                 </div>

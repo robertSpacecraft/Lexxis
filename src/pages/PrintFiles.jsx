@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { printFilesApi } from '../api/printFiles';
+import { printJobsApi } from '../api/printJobs';
 import styles from './PrintFiles.module.css';
 
 export default function PrintFiles() {
+    const navigate = useNavigate();
     const [files, setFiles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -49,14 +52,34 @@ export default function PrintFiles() {
         if (notes) formData.append('notes', notes);
 
         try {
-            await printFilesApi.uploadPrintFile(formData);
+            const uploadedFile = await printFilesApi.uploadPrintFile(formData);
             setUploadSuccess('Subido correctamente');
             setSelectedFile(null);
             setNotes('');
-            // Reset file input
             e.target.reset();
-            // Refresh list
-            fetchFiles();
+            // Automatically create a PrintJob implicitly and redirect to it
+            if (uploadedFile && uploadedFile.id) {
+                try {
+                    // Start an implicit job creation using default parameters
+                    const newJob = await printJobsApi.createPrintJob(uploadedFile.id, {
+                        technology: 'fdm',
+                        material_id: 1, // Default safe value
+                        color_name: 'Blanco', // Default safe value
+                        quantity: 1,
+                        infill_percent: 20,
+                        scale_percent: 100
+                    });
+                    navigate(`/account/printfiles/${uploadedFile.id}/jobs/${newJob.id}`);
+                    return; // Prevent further execution
+                } catch (jobErr) {
+                    console.error("Error al arrancar el job inicial:", jobErr);
+                    // Si falla el auto-job, al menos llevar al detalle del archivo
+                    navigate(`/account/printfiles/${uploadedFile.id}`);
+                    return; 
+                }
+            } else {
+                fetchFiles();
+            }
         } catch (err) {
             console.error(err);
             setError(err.message || 'Error al subir el archivo.');
@@ -81,6 +104,19 @@ export default function PrintFiles() {
             alert(err.message || 'Error al descargar el archivo');
         }
     };
+
+    const handleDeleteFile = async (id, name) => {
+        if (!window.confirm(`¿Eliminar el archivo "${name}"? Esta acción no se puede deshacer.`)) return;
+        try {
+            await printFilesApi.deletePrintFile(id);
+            await fetchFiles();
+        } catch (err) {
+            console.error(err);
+            const msg = err?.response?.data?.message || err.message || 'No se ha podido eliminar el archivo.';
+            setError(msg);
+        }
+    };
+
 
     return (
         <div>
@@ -163,13 +199,30 @@ export default function PrintFiles() {
                                                 </div>
                                             )}
                                         </div>
-                                        <button
-                                            onClick={() => handleDownload(file.id, file.original_name)}
-                                            className={styles.downloadBtn}
-                                            title="Descargar"
-                                        >
-                                            ⬇ Descargar
-                                        </button>
+                                        <div style={{ display: 'flex', gap: 'var(--spacing-sm)' }}>
+                                            <Link 
+                                                to={`/account/printfiles/${file.id}`} 
+                                                className={styles.downloadBtn} 
+                                                style={{ textDecoration: 'none' }}
+                                            >
+                                                Ver Detalles
+                                            </Link>
+                                            <button
+                                                onClick={() => handleDownload(file.id, file.original_name)}
+                                                className={styles.downloadBtn}
+                                                style={{ marginLeft: 0 }}
+                                                title="Descargar"
+                                            >
+                                                ⬇
+                                            </button>
+                                            <button
+                                                onClick={() => handleDeleteFile(file.id, file.original_name)}
+                                                className={styles.btnDanger}
+                                                title="Eliminar archivo"
+                                            >
+                                                Eliminar
+                                            </button>
+                                        </div>
                                     </div>
                                 ))}
                             </div>

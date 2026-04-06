@@ -16,6 +16,11 @@ import Profile from '../pages/account/Profile';
 import MyDesigns from '../pages/account/MyDesigns';
 import Cart from '../pages/account/Cart';
 import PrintFiles from '../pages/PrintFiles';
+import PrintJobConfig from '../pages/account/PrintJobConfig';
+import MyPrintJobs from '../pages/account/MyPrintJobs';
+import PrintFileDetail from '../pages/account/PrintFileDetail';
+import PrintFileConfigure from '../pages/account/PrintFileConfigure';
+import ServicePrint3D from '../pages/ServicePrint3D';
 
 export default function AppRouter() {
     return (
@@ -35,7 +40,8 @@ export default function AppRouter() {
             {/* Protected Routes */}
             <Route element={<ProtectedRoute />}>
                 <Route path="/catalog/products/:productId/design" element={<ProductConfigurator />} />
-                
+                <Route path="/services/print3d" element={<ServicePrint3D />} />
+
                 {/* Account Dashboard */}
                 <Route path="/account" element={<AccountLayout />}>
                     <Route index element={<Profile />} />
@@ -43,6 +49,10 @@ export default function AppRouter() {
                     <Route path="designs" element={<MyDesigns />} />
                     <Route path="cart" element={<Cart />} />
                     <Route path="printfiles" element={<PrintFiles />} />
+                    <Route path="printfiles/:printFileId" element={<PrintFileDetail />} />
+                    <Route path="printfiles/:printFileId/configure" element={<PrintFileConfigure />} />
+                    <Route path="printjobs" element={<MyPrintJobs />} />
+                    <Route path="printfiles/:printFileId/jobs/:printJobId" element={<PrintJobConfig />} />
                 </Route>
             </Route>
 

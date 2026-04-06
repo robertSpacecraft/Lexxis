@@ -234,3 +234,26 @@
   color: var(--color-accent);
   border-color: var(--color-accent);
 }
+
+.btnDanger {
+  background: var(--color-bg);
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-body-sm);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.btnDanger:hover:not(:disabled) {
+  background: var(--color-error);
+  color: var(--color-white);
+}
+
+.btnDanger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
