@@ -15,7 +15,7 @@ function getCookie(name) {
 async function request(endpoint, { method = 'GET', body, headers = {}, responseType = 'json', withMeta = false, ...customConfig } = {}) {
     const token = authStorage.getToken();
     const xsrfToken = getCookie('XSRF-TOKEN');
-    
+
     const config = {
         method,
         headers: {
@@ -40,12 +40,9 @@ async function request(endpoint, { method = 'GET', body, headers = {}, responseT
 
     try {
         const response = await fetch(`${API_URL}${endpoint}`, config);
-        
+
         if (response.status === 401) {
             authStorage.clear();
-            if (window.location.pathname !== '/login') {
-                window.location.href = '/login';
-            }
             throw { status: 401, message: 'No autenticado', errors: null };
         }
 
@@ -63,7 +60,7 @@ async function request(endpoint, { method = 'GET', body, headers = {}, responseT
             return null;
         }
 
-        const data = await response.json().catch(() => ({})); 
+        const data = await response.json().catch(() => ({}));
 
         // Centralizamos el manejo de errores basándonos en success = false o status != 200
         if (!response.ok || data.success === false) {
@@ -88,18 +85,18 @@ async function request(endpoint, { method = 'GET', body, headers = {}, responseT
         if (error && error.status !== undefined) {
             return Promise.reject(error);
         }
-        
+
         // Handle common CORS/Redirect issues (status 0)
         const isPotentialRedirect = error instanceof TypeError && error.message === 'Failed to fetch';
-        const msg = isPotentialRedirect 
+        const msg = isPotentialRedirect
             ? 'Error de conexión o conflicto de sesión (CORS/Redirect). Prueba a limpiar cookies.'
             : 'Error de red o conexión';
 
-        return Promise.reject({ 
-            status: 0, 
-            message: msg, 
-            errors: null, 
-            original: error 
+        return Promise.reject({
+            status: 0,
+            message: msg,
+            errors: null,
+            original: error
         });
     }
 }
