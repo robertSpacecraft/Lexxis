@@ -1,7 +1,7 @@
 .title {
     font-family: var(--font-titles);
     font-size: var(--font-size-h2);
-    color: var(--color-primary);
+    color: var(--color-text-on-surface);
     margin-bottom: var(--spacing-lg);
     font-weight: var(--font-weight-bold);
 }
@@ -11,7 +11,8 @@
     justify-content: center;
     align-items: center;
     padding: var(--spacing-xxl);
-    color: var(--color-text-muted);
+    color: var(--color-text-on-surface);
+    opacity: 0.8;
 }
 
 .errorBox {
@@ -27,10 +28,11 @@
 .emptyState {
     text-align: center;
     padding: var(--spacing-xxl);
-    background-color: var(--color-surface);
+    background-color: var(--color-bg);
     border-radius: var(--radius-lg);
     border: 1px dashed var(--color-border);
-    color: var(--color-text-muted);
+    color: var(--color-text-on-surface);
+    opacity: 0.8;
 }
 
 /* Layout */
@@ -87,7 +89,7 @@
 
 .itemName {
     font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
+    color: var(--color-text-on-surface);
     font-size: var(--font-size-body);
     white-space: nowrap;
     overflow: hidden;
@@ -96,13 +98,15 @@
 
 .itemMeta {
     font-size: var(--font-size-caption);
-    color: var(--color-text-muted);
+    color: var(--color-text-on-surface);
+    opacity: 0.7;
 }
 
 /* Quantity */
 .itemQuantity {
     font-size: var(--font-size-body-sm);
-    color: var(--color-text-muted);
+    color: var(--color-text-on-surface);
+    opacity: 0.7;
     text-align: center;
     flex-shrink: 0;
 }
@@ -125,7 +129,7 @@
     justify-content: center;
     background: transparent;
     border: none;
-    color: var(--color-primary);
+    color: var(--color-text-on-surface);
     font-weight: var(--font-weight-bold);
     font-size: 1rem;
     cursor: pointer;
@@ -134,7 +138,7 @@
 }
 
 .btnQuantity:hover:not(:disabled) {
-    background-color: var(--color-surface);
+    background-color: var(--color-border);
 }
 
 .btnQuantity:disabled {
@@ -146,14 +150,14 @@
     min-width: 1.5rem;
     text-align: center;
     font-weight: var(--font-weight-medium);
-    color: var(--color-text);
+    color: var(--color-text-on-surface);
 }
 
 /* Price */
 .itemPrice {
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-body-lg);
-    color: var(--color-primary);
+    color: var(--color-text-on-surface);
     flex-shrink: 0;
     text-align: right;
     min-width: 5rem;
@@ -201,7 +205,7 @@
 .summaryTitle {
     font-family: var(--font-titles);
     font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
+    color: var(--color-text-on-surface);
     margin-bottom: var(--spacing-md);
     padding-bottom: var(--spacing-xs);
     border-bottom: var(--border-default);
@@ -213,13 +217,14 @@
     margin-bottom: var(--spacing-md);
     font-size: var(--font-size-body);
     font-weight: var(--font-weight-medium);
+    color: var(--color-text-on-surface);
 }
 
 .btnCheckout {
     width: 100%;
     padding: var(--spacing-md);
     background-color: var(--color-accent);
-    color: var(--color-white);
+    color: #FFFFFF;
     border: none;
     border-radius: var(--radius-md);
     font-family: var(--font-titles);
@@ -243,7 +248,8 @@
 .checkoutNote {
     margin-top: var(--spacing-sm);
     font-size: var(--font-size-caption);
-    color: var(--color-text-muted);
+    color: var(--color-text-on-surface);
+    opacity: 0.8;
     text-align: center;
     line-height: var(--line-height-body);
 }

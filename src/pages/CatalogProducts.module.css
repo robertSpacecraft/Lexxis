@@ -82,13 +82,14 @@
 .productName {
   font-family: var(--font-titles);
   font-size: var(--font-size-h4);
-  color: var(--color-text);
+  color: var(--color-text-on-surface);
   margin-bottom: var(--spacing-xs);
 }
 
 .productSlug {
   font-size: var(--font-size-body-sm);
-  color: var(--color-text-muted);
+  color: var(--color-text-on-surface);
+  opacity: 0.7;
   margin-bottom: var(--spacing-sm);
 }
 

@@ -65,7 +65,7 @@
   font-family: var(--font-titles);
   font-weight: var(--font-weight-medium);
   font-size: var(--font-size-body-sm);
-  color: var(--color-primary);
+  color: var(--color-text-on-surface);
 }
 
 .inputField, .textareaField {
@@ -155,13 +155,14 @@
 .infoText h4 {
   font-family: var(--font-titles);
   font-size: var(--font-size-h4);
-  color: var(--color-primary);
+  color: var(--color-text-on-surface);
   margin-bottom: var(--spacing-xxs);
 }
 
 .infoText p {
   font-family: var(--font-body);
-  color: var(--color-text-muted);
+  color: var(--color-text-on-surface);
+  opacity: 0.8;
   line-height: 1.4;
 }
 

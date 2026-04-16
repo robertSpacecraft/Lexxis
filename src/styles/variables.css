@@ -17,11 +17,13 @@
   --color-surface: #E5E5E5;
   --color-text-muted: #555555;
   --color-border: #DDDDDD;
+  --color-text-on-surface: #000000;
 
   /* Semántica */
   --color-success: #2E7D32;
   --color-warning: #ED6C02;
   --color-error: #D32F2F;
+  --color-on-overlay: #FFFFFF;
 
   /* Escala de Fuente (REM) */
   --font-size-display: 3rem;       /* 48px */
@@ -65,4 +67,32 @@
   /* Layout */
   --max-width-container: 1200px;
   --padding-horizontal: var(--spacing-md);
+}
+
+:root[data-theme="dark"] {
+  /* Background (Oscuro muy sobrio) */
+  --color-bg: #0A1120;
+
+  /* Superficie más clara que el fondo, oscura */
+  --color-surface: #111827;
+
+  /* Color Primario para Títulos (Gris Claro-Azulado para títulos generales) */
+  --color-primary: #CBD5E1;
+  
+  /* Textos sobre superficies en modo oscuro (Blanco Frio) */
+  --color-text-on-surface: #F1F5F9;
+
+  /* Textos Principales sobre fondo oscuro (Blanco Frio) */
+  --color-text: #F1F5F9;
+  
+  /* Textos Secundarios / Ocultos sobre fondo oscuro */
+  --color-text-muted: #94A3B8;
+  
+  /* Bordes Suaves */
+  --color-border: #1E293B;
+
+  /* Texto sobre fondos oscuros / overlays (Siempre blanco) */
+  --color-on-overlay: #FFFFFF;
+
+  /* Se respeta el color accent (naranja) y status */
 }

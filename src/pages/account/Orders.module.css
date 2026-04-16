@@ -3,7 +3,7 @@
 .title {
     font-family: var(--font-titles);
     font-size: var(--font-size-h2);
-    color: var(--color-primary);
+    color: var(--color-text-on-surface);
     margin-bottom: var(--spacing-lg);
     font-weight: var(--font-weight-bold);
 }
@@ -12,7 +12,8 @@
     display: flex;
     justify-content: center;
     padding: var(--spacing-xxl);
-    color: var(--color-text-muted);
+    color: var(--color-text-on-surface);
+    opacity: 0.8;
 }
 
 .errorBox {
@@ -28,10 +29,11 @@
 .emptyState {
     text-align: center;
     padding: var(--spacing-xxl);
-    background-color: var(--color-surface);
+    background-color: var(--color-bg);
     border-radius: var(--radius-lg);
     border: 1px dashed var(--color-border);
-    color: var(--color-text-muted);
+    color: var(--color-text-on-surface);
+    opacity: 0.8;
 }
 
 /* Orders list */
@@ -63,14 +65,15 @@
 
 .orderRef {
     font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
+    color: var(--color-text-on-surface);
     font-size: var(--font-size-body);
     margin-bottom: var(--spacing-xxs);
 }
 
 .orderDate {
     font-size: var(--font-size-caption);
-    color: var(--color-text-muted);
+    color: var(--color-text-on-surface);
+    opacity: 0.7;
 }
 
 .orderStatus {
@@ -84,14 +87,14 @@
     font-size: var(--font-size-caption);
     font-weight: var(--font-weight-medium);
     background: var(--color-bg);
-    color: var(--color-text);
+    color: var(--color-text-on-surface);
     border: var(--border-default);
     text-transform: capitalize;
 }
 
 .orderTotal {
     font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
+    color: var(--color-text-on-surface);
     font-size: var(--font-size-body-lg);
     flex-shrink: 0;
     min-width: 5rem;
@@ -102,7 +105,7 @@
     display: inline-block;
     padding: var(--spacing-xs) var(--spacing-md);
     background: var(--color-bg);
-    color: var(--color-primary);
+    color: var(--color-text-on-surface);
     border: var(--border-default);
     border-radius: var(--radius-sm);
     font-size: var(--font-size-body-sm);
@@ -114,23 +117,25 @@
 }
 
 .btnDetail:hover {
-    background: var(--color-surface);
+    background: var(--color-accent);
     border-color: var(--color-accent);
-    color: var(--color-accent);
+    color: #FFFFFF;
 }
 
 /* Order detail */
 .backLink {
     display: inline-block;
     margin-bottom: var(--spacing-md);
-    color: var(--color-text-muted);
+    color: var(--color-text-on-surface);
+    opacity: 0.7;
     text-decoration: none;
     font-size: var(--font-size-body-sm);
     transition: color 0.2s ease;
 }
 
 .backLink:hover {
-    color: var(--color-primary);
+    color: var(--color-text-on-surface);
+    opacity: 1;
 }
 
 .detailHeader {
@@ -147,11 +152,12 @@
     gap: var(--spacing-lg);
     flex-wrap: wrap;
     font-size: var(--font-size-body-sm);
-    color: var(--color-text-muted);
+    color: var(--color-text-on-surface);
+    opacity: 0.8;
 }
 
 .detailMeta strong {
-    color: var(--color-text);
+    color: var(--color-text-on-surface);
 }
 
 /* Detail items */
@@ -176,19 +182,21 @@
 .detailItemName {
     flex: 1;
     font-weight: var(--font-weight-medium);
-    color: var(--color-primary);
+    color: var(--color-text-on-surface);
     font-size: var(--font-size-body);
 }
 
 .detailItemMeta {
     font-size: var(--font-size-caption);
-    color: var(--color-text-muted);
+    color: var(--color-text-on-surface);
+    opacity: 0.8;
     flex-shrink: 0;
 }
 
 .detailItemQty {
     font-size: var(--font-size-body-sm);
-    color: var(--color-text-muted);
+    color: var(--color-text-on-surface);
+    opacity: 0.8;
     flex-shrink: 0;
     min-width: 4rem;
     text-align: center;
@@ -196,7 +204,7 @@
 
 .detailItemPrice {
     font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
+    color: var(--color-text-on-surface);
     flex-shrink: 0;
     min-width: 5rem;
     text-align: right;
@@ -213,11 +221,11 @@
     padding: var(--spacing-md) var(--spacing-lg);
     box-shadow: var(--shadow-sm);
     font-size: var(--font-size-body-lg);
-    color: var(--color-primary);
+    color: var(--color-text-on-surface);
 }
 
 .detailTotal strong {
     font-family: var(--font-titles);
     font-size: var(--font-size-h3);
-    color: var(--color-primary);
+    color: var(--color-text-on-surface);
 }

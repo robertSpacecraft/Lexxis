@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { authApi } from '../api/auth';
 import { authStorage } from '../store/authStorage';
 import Navbar from '../components/Navbar';
@@ -90,6 +90,10 @@ export default function Login() {
                             {loading ? 'Cargando...' : 'Entrar'}
                         </button>
                     </form>
+
+                    <div className={styles.linkInfo}>
+                        ¿No tienes cuenta? <Link to="/register" className={styles.link}>Regístrate aquí</Link>
+                    </div>
 
                     <div className={styles.demoInfo}>
                         <p>Credenciales demo:</p>

@@ -30,6 +30,12 @@
   object-fit: contain;
 }
 
+.navContent {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+
 .navLinks {
   display: flex;
   gap: var(--spacing-lg);
@@ -139,4 +145,105 @@
 .userEmail {
   font-size: var(--font-size-caption);
   color: var(--color-text-muted);
+}
+
+/* --- Mobile Menu Styles --- */
+.hamburgerBtn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  z-index: 101;
+}
+
+.mobileTextOnly {
+  display: none;
+}
+
+.loginText {
+  font-size: var(--font-size-body-sm);
+}
+
+@media (max-width: 768px) {
+  .brandLogo {
+    height: 4rem;
+  }
+
+  .hamburgerBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .navContent {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--color-bg);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: var(--spacing-lg) var(--padding-horizontal);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+    
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    pointer-events: none;
+  }
+
+  .navContent.isOpen {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .navLinks {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 0;
+    width: 100%;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .navLink {
+    width: 100%;
+    padding: var(--spacing-xs) 0;
+    font-size: var(--font-size-h4);
+  }
+
+  .navLink::after {
+    display: none;
+  }
+
+  .userSection {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-left: 0;
+    gap: var(--spacing-md);
+  }
+
+  .iconWrapper {
+    width: 100%;
+    padding: var(--spacing-xs) 0;
+    justify-content: flex-start;
+  }
+
+  .userInfo {
+    align-items: flex-start;
+  }
+
+  .mobileTextOnly {
+    display: inline;
+    margin-left: var(--spacing-xs);
+  }
 }

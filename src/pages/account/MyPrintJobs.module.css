@@ -12,12 +12,13 @@
 .title {
   font-family: var(--font-secondary);
   font-size: var(--font-size-h2);
-  color: var(--color-primary);
+  color: var(--color-text-on-surface);
   margin-bottom: var(--spacing-xs);
 }
 
 .subtitle {
-  color: var(--color-text-muted);
+  color: var(--color-text-on-surface);
+  opacity: 0.8;
   font-size: var(--font-size-body);
   margin-bottom: var(--spacing-xl);
 }
@@ -94,7 +95,7 @@
 
 .jobTitle {
   font-weight: var(--font-weight-bold);
-  color: var(--color-text);
+  color: var(--color-text-on-surface);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -103,18 +104,20 @@
 .jobPrice {
   font-size: var(--font-size-h4);
   font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
+  color: var(--color-text-on-surface);
   margin-top: var(--spacing-xxs);
 }
 
 .jobNote {
   font-size: var(--font-size-body-sm);
-  color: var(--color-text-muted);
+  color: var(--color-text-on-surface);
+  opacity: 0.8;
   margin-top: var(--spacing-xxs);
 }
 
 .emptyText {
-  color: var(--color-text-muted);
+  color: var(--color-text-on-surface);
+  opacity: 0.8;
   font-size: var(--font-size-body-sm);
 }
 
@@ -127,7 +130,7 @@
 /* Botones */
 .btnPrimary {
   background-color: var(--color-accent);
-  color: var(--color-white);
+  color: #FFFFFF;
   border: none;
   padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--radius-md);
@@ -146,8 +149,8 @@
 
 .btnSecondary {
   background-color: transparent;
-  color: var(--color-primary);
-  border: 1px solid var(--color-primary);
+  color: var(--color-text-on-surface);
+  border: 1px solid var(--color-border);
   padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--radius-md);
   font-family: var(--font-secondary);
@@ -159,5 +162,5 @@
 }
 
 .btnSecondary:hover {
-  background-color: var(--color-surface);
+  background-color: var(--color-bg);
 }

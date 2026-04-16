@@ -36,7 +36,7 @@
   font-size: var(--font-size-body-lg);
   max-width: 800px;
   margin: 0 auto;
-  color: var(--color-text-muted);
+  color: var(--color-text-on-surface);
 }
 
 .slogan {
@@ -149,12 +149,13 @@
 .teamInfo h4 {
   font-family: var(--font-titles);
   font-size: var(--font-size-h4);
-  color: var(--color-primary);
+  color: var(--color-text-on-surface);
   margin-bottom: var(--spacing-xxs);
 }
 
 .teamInfo p {
-  color: var(--color-text-muted);
+  color: var(--color-text-on-surface);
+  opacity: 0.8;
 }
 
 @media (max-width: 768px) {

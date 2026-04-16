@@ -6,21 +6,22 @@
 
 .title {
   font-family: var(--font-titles);
-  color: var(--color-primary);
+  color: var(--color-text-on-surface);
   margin-bottom: var(--spacing-lg);
 }
 
 .backLink {
   display: inline-block;
   margin-bottom: var(--spacing-md);
-  color: var(--color-text-muted);
+  color: var(--color-text-on-surface);
+  opacity: 0.8;
   text-decoration: none;
   font-size: var(--font-size-body-sm);
-  transition: color 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
 .backLink:hover {
-  color: var(--color-primary);
+  opacity: 1;
 }
 
 .layout {
@@ -47,7 +48,7 @@
 .sectionTitle {
   font-family: var(--font-titles);
   font-size: var(--font-size-h3);
-  color: var(--color-primary);
+  color: var(--color-text-on-surface);
   margin-bottom: var(--spacing-lg);
   border-bottom: 2px solid var(--color-border);
   padding-bottom: var(--spacing-xs);
@@ -62,7 +63,7 @@
   display: block;
   font-family: var(--font-body);
   font-weight: var(--font-weight-medium);
-  color: var(--color-text);
+  color: var(--color-text-on-surface);
   margin-bottom: var(--spacing-xxs);
 }
 
@@ -74,6 +75,7 @@
   font-family: var(--font-body);
   font-size: var(--font-size-body);
   background-color: var(--color-bg);
+  color: var(--color-text-on-surface);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -84,8 +86,9 @@
 }
 
 .selectInput:disabled, .numberInput:disabled {
-  background-color: #f5f5f5;
-  color: var(--color-text-muted);
+  background-color: #F8FAFC;
+  opacity: 0.6;
+  color: var(--color-text-on-surface);
   cursor: not-allowed;
 }
 
@@ -106,7 +109,7 @@
 }
 
 .reviewText {
-  color: var(--color-text);
+  color: #14213D;
   font-size: var(--font-size-body-sm);
   margin-bottom: var(--spacing-sm);
 }
@@ -132,17 +135,18 @@
   justify-content: space-between;
   margin-bottom: var(--spacing-xs);
   font-size: var(--font-size-body-sm);
-  color: var(--color-text-muted);
+  color: var(--color-text-on-surface);
+  opacity: 0.8;
 }
 
 .summaryRow strong {
-  color: var(--color-text);
+  color: var(--color-text-on-surface);
 }
 
 .priceDisplay {
   font-family: var(--font-titles);
   font-size: var(--font-size-display);
-  color: var(--color-primary);
+  color: var(--color-text-on-surface);
   margin-top: var(--spacing-md);
   text-align: right;
 }
@@ -150,7 +154,7 @@
 /* Buttons */
 .btnPrimary {
   background-color: var(--color-accent);
-  color: var(--color-white);
+  color: #FFFFFF;
   border: none;
   padding: var(--spacing-md);
   width: 100%;
@@ -176,8 +180,8 @@
 
 .btnSecondary {
   background-color: transparent;
-  color: var(--color-primary);
-  border: 1px solid var(--color-primary);
+  color: var(--color-text-on-surface);
+  border: 1px solid var(--color-border);
   padding: var(--spacing-md);
   width: 100%;
   border-radius: var(--radius-md);
@@ -190,7 +194,7 @@
 }
 
 .btnSecondary:hover:not(:disabled) {
-  background-color: var(--color-surface);
+  background-color: var(--color-bg);
 }
 
 .btnSecondary:disabled {
@@ -203,7 +207,7 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: var(--color-primary);
+  background-color: #14213D;
   color: white;
   padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--radius-md);

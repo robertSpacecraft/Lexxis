@@ -12,7 +12,7 @@
   box-shadow: var(--shadow-md);
   padding: var(--spacing-xl);
   width: 100%;
-  max-width: 420px;
+  max-width: 480px;
   border: var(--border-default);
 }
 
@@ -50,12 +50,28 @@
   margin-bottom: var(--spacing-md);
 }
 
+.inputRow {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.inputRow > .inputGroup {
+  margin-bottom: 0;
+  flex: 1;
+}
+
 .inputLabel {
   display: block;
   margin-bottom: var(--spacing-xxs);
   color: var(--color-text-on-surface);
   font-size: var(--font-size-body-sm);
   font-weight: var(--font-weight-medium);
+}
+.inputLabel span {
+  color: var(--color-text-muted);
+  font-weight: normal;
+  margin-left: 4px;
 }
 
 .formInput {
@@ -101,14 +117,6 @@
 .submitBtn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
-}
-
-.demoInfo {
-  margin-top: var(--spacing-xl);
-  text-align: center;
-  font-size: var(--font-size-caption);
-  color: var(--color-text-on-surface);
-  opacity: 0.6;
 }
 
 .linkInfo {
