@@ -1,29 +1,16 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { catalogApi } from '../api/catalog';
 import { getImageUrl } from '../utils/imageMapper';
+import { useAsync } from '../hooks/useAsync';
 import Navbar from '../components/Navbar';
 import styles from './CatalogProducts.module.css';
 
 export default function CatalogProducts() {
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const { data, loading, error } = useAsync(catalogApi.getProducts, {
+        errorMessage: 'No se pudieron cargar los productos.'
+    });
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const { items } = await catalogApi.getProducts();
-                setProducts(items);
-            } catch (err) {
-                console.error(err);
-                setError(err.message || 'No se pudieron cargar los productos.');
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchProducts();
-    }, []);
+    const products = data?.items || [];
 
     if (loading) return (
         <>

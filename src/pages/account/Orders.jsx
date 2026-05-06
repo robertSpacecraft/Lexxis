@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ordersApi } from '../../api/orders';
+import { useAsync } from '../../hooks/useAsync';
 import styles from './Orders.module.css';
 
 function formatDate(dateStr) {
@@ -19,25 +19,10 @@ function formatPrice(value) {
 }
 
 export default function Orders() {
-    const [orders, setOrders] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                const data = await ordersApi.getOrders();
-                setOrders(data || []);
-            } catch (err) {
-                console.error(err);
-                setError(err.message || 'Error al cargar los pedidos.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchOrders();
-    }, []);
+    const { data, loading, error } = useAsync(ordersApi.getOrders, {
+        errorMessage: 'Error al cargar los pedidos.'
+    });
+    const orders = data || [];
 
     if (loading) {
         return <div className={styles.centerSpinner}>Cargando pedidos...</div>;

@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { printFilesApi } from '../api/printFiles';
 import { printJobsApi } from '../api/printJobs';
+import MyPrintJobs from './account/MyPrintJobs';
 import styles from './PrintFiles.module.css';
 
 export default function PrintFiles() {
     const navigate = useNavigate();
+    const [activeTab, setActiveTab] = useState('files');
     const [files, setFiles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -120,8 +122,40 @@ export default function PrintFiles() {
 
     return (
         <div>
-            <h1 className={styles.title}>Mis Archivos de Impresión</h1>
+            <div style={{ display: 'flex', gap: '2rem', borderBottom: '1px solid var(--color-border)', marginBottom: 'var(--spacing-lg)' }}>
+                <button 
+                    onClick={() => setActiveTab('files')}
+                    style={{ 
+                        background: 'none', 
+                        border: 'none', 
+                        padding: '1rem 0', 
+                        cursor: 'pointer', 
+                        fontSize: '1.25rem', 
+                        fontWeight: '600', 
+                        borderBottom: activeTab === 'files' ? '3px solid var(--color-primary)' : '3px solid transparent',
+                        color: activeTab === 'files' ? 'var(--color-primary)' : 'var(--color-text-muted)'
+                    }}
+                >
+                    Biblioteca y Subidas
+                </button>
+                <button 
+                    onClick={() => setActiveTab('jobs')}
+                    style={{ 
+                        background: 'none', 
+                        border: 'none', 
+                        padding: '1rem 0', 
+                        cursor: 'pointer', 
+                        fontSize: '1.25rem', 
+                        fontWeight: '600', 
+                        borderBottom: activeTab === 'jobs' ? '3px solid var(--color-primary)' : '3px solid transparent',
+                        color: activeTab === 'jobs' ? 'var(--color-primary)' : 'var(--color-text-muted)'
+                    }}
+                >
+                    Presupuestos y Trabajos
+                </button>
+            </div>
 
+            {activeTab === 'files' ? (
                 <div className={styles.layout}>
                     {/* Upload Form */}
                     <div className={styles.card}>
@@ -229,6 +263,9 @@ export default function PrintFiles() {
                         )}
                     </div>
                 </div>
+            ) : (
+                <MyPrintJobs />
+            )}
         </div>
     );
 }

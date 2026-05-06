@@ -1,30 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { catalogApi } from '../api/catalog';
+import { useAsync } from '../hooks/useAsync';
 import ImageGallery from '../components/ImageGallery';
 import Navbar from '../components/Navbar';
 import styles from './CatalogProductDetail.module.css';
 
 export default function CatalogProductDetail() {
     const { productId } = useParams();
-    const [product, setProduct] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const productData = await catalogApi.getProduct(productId);
-                setProduct(productData);
-            } catch (err) {
-                console.error(err);
-                setError(err.message || 'No se pudo cargar el producto.');
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchProduct();
-    }, [productId]);
+    const fetchProduct = useCallback(() => catalogApi.getProduct(productId), [productId]);
+
+    const { data: product, loading, error } = useAsync(fetchProduct, {
+        immediate: !!productId,
+        errorMessage: 'No se pudo cargar el producto.'
+    });
 
     if (loading) return (
         <>

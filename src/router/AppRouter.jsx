@@ -4,6 +4,7 @@ import Register from '../pages/Register';
 import Home from '../pages/Home';
 import About from '../pages/About';
 import News from '../pages/News';
+import NewsDetail from '../pages/NewsDetail';
 import Contact from '../pages/Contact';
 import CatalogProducts from '../pages/CatalogProducts';
 import CatalogProductDetail from '../pages/CatalogProductDetail';
@@ -18,7 +19,7 @@ import MyDesigns from '../pages/account/MyDesigns';
 import Cart from '../pages/account/Cart';
 import PrintFiles from '../pages/PrintFiles';
 import PrintJobConfig from '../pages/account/PrintJobConfig';
-import MyPrintJobs from '../pages/account/MyPrintJobs';
+
 import PrintFileDetail from '../pages/account/PrintFileDetail';
 import PrintFileConfigure from '../pages/account/PrintFileConfigure';
 import Orders from '../pages/account/Orders';
@@ -34,6 +35,7 @@ export default function AppRouter() {
             <Route path="/register" element={<Register />} />
             <Route path="/about" element={<About />} />
             <Route path="/news" element={<News />} />
+            <Route path="/news/:slug" element={<NewsDetail />} />
             <Route path="/contact" element={<Contact />} />
 
             <Route path="/catalog" element={<CatalogProducts />} />
@@ -55,7 +57,7 @@ export default function AppRouter() {
                     <Route path="printfiles" element={<PrintFiles />} />
                     <Route path="printfiles/:printFileId" element={<PrintFileDetail />} />
                     <Route path="printfiles/:printFileId/configure" element={<PrintFileConfigure />} />
-                    <Route path="printjobs" element={<MyPrintJobs />} />
+
                     <Route path="printfiles/:printFileId/jobs/:printJobId" element={<PrintJobConfig />} />
                     <Route path="orders" element={<Orders />} />
                     <Route path="orders/:orderId" element={<OrderDetail />} />

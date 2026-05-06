@@ -1,6 +1,10 @@
 import { apiClient } from './apiClient';
 
 export const printJobsApi = {
+    getAllPrintJobs: (params = {}) => {
+        const query = new URLSearchParams(params).toString();
+        return apiClient.get(`/print-jobs${query ? `?${query}` : ''}`);
+    },
     getPrintJobs: (fileId) => apiClient.get(`/print-files/${fileId}/jobs`),
     createPrintJob: (fileId, payload) => apiClient.post(`/print-files/${fileId}/jobs`, payload),
     getPrintJob: (fileId, jobId) => apiClient.get(`/print-files/${fileId}/jobs/${jobId}`),

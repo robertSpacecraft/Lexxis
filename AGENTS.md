@@ -426,6 +426,137 @@ Los componentes deben limitarse a:
 
 ---
 
+## Gestión de operaciones asíncronas (useAsync)
+
+El hook `useAsync` es el estándar para gestionar llamadas asíncronas a la API, centralizando los estados de carga, error y datos.
+
+### Estados (status)
+El valor de `status` devuelto por el hook puede ser:
+- `'idle'`: Estado inicial, antes de ejecutar la petición.
+- `'pending'`: Petición en curso.
+- `'success'`: Petición completada con éxito.
+- `'error'`: Petición fallida.
+
+---
+
+### Uso recomendado
+
+#### 1. Llamadas simples
+Para peticiones sin parámetros dinámicos, pasar directamente la referencia estable del servicio API:
+
+```javascript
+const { data, loading, error } = useAsync(catalogApi.getProducts, {
+  errorMessage: 'No se pudieron cargar los productos.'
+});
+```
+
+#### 2. Llamadas con parámetros o dependencias
+Para peticiones que dependen de parámetros de ruta, estado o props, la función **debe** envolverse obligatoriamente en `useCallback` para mantener una referencia estable:
+
+```javascript
+const fetchProduct = useCallback(
+  () => catalogApi.getProduct(productId),
+  [productId]
+);
+
+const { data: product, loading, error } = useAsync(fetchProduct, {
+  immediate: !!productId,
+  errorMessage: 'No se pudo cargar el producto.'
+});
+```
+
+---
+
+### Restricciones importantes
+
+#### Prohibido pasar funciones inline
+**NUNCA** pasar funciones inline directamente al hook:
+
+```javascript
+// ❌ INCORRECTO: crea una nueva referencia en cada render.
+useAsync(() => catalogApi.getProduct(productId), {
+  immediate: !!productId
+});
+```
+Esto provoca bucles de renderizado o peticiones repetidas infinitas al cambiar la referencia en cada ciclo de vida del componente.
+
+---
+
+### Normalización de datos
+`useAsync` **no debe modificar ni reinterpretar** el contrato del backend. Su responsabilidad es exclusivamente ejecutar la función asíncrona y gestionar los estados de React.
+
+La normalización de datos debe hacerse en el componente o, preferiblemente, en el servicio API correspondiente.
+
+**Ejemplos de normalización en consumo:**
+```javascript
+// Si el servicio devuelve un array directo:
+const items = data || [];
+
+// Si el servicio devuelve una respuesta con items:
+const items = data?.items || [];
+
+// Si existe incertidumbre temporal durante una migración de contrato:
+const items = Array.isArray(data)
+  ? data
+  : data?.data || data?.items || [];
+```
+
+---
+
+### Mensajes de error
+Cuando la página requiera un mensaje de error específico para el usuario, usar la opción `errorMessage`:
+
+```javascript
+useAsync(printJobsApi.getAllPrintJobs, {
+  errorMessage: 'Error al cargar los trabajos de impresión.'
+});
+```
+
+**Regla:** No envolver la función en `try/catch` dentro del componente solo para personalizar el mensaje de error. Para eso debe usarse `errorMessage`.
+
+---
+
+### Cuándo usar useAsync
+- Cargas iniciales de páginas (on mount).
+- Llamadas GET simples.
+- Listados y detalles por ID.
+- Vistas de solo lectura.
+- Componentes donde se repita el patrón loading/error/data.
+
+### Cuándo NO usar useAsync todavía
+No usar como sustituto automático en:
+- Formularios de login o registro.
+- Formularios de edición complejos o subidas de archivos.
+- Flujos que requieran `FormData`.
+- Carrito o checkout con múltiples mutaciones.
+- Configuradores complejos con lógica de negocio pesada.
+- Componentes con varias llamadas encadenadas que dependen entre sí de forma compleja.
+- Operaciones POST, PUT, PATCH o DELETE que requieran tratamiento específico de éxito/error.
+- Casos donde sea más apropiado un futuro hook tipo `useMutation` o `useForm`.
+
+---
+
+### Protocolo de refactorización
+No realizar refactorizaciones masivas. Antes de migrar una página a `useAsync`:
+1. Analizar qué llamada API realiza.
+2. Confirmar la estructura real de respuesta.
+3. Confirmar si necesita `useCallback`.
+4. Asegurar que no existen mutaciones, formularios o efectos secundarios complejos.
+5. Refactorizar una página o un bloque pequeño cada vez.
+6. Validar en el navegador (pestaña Network) que no hay peticiones en bucle.
+
+---
+
+### Casos de referencia (ya validados)
+Los siguientes archivos ya implementan este patrón y sirven como ejemplo de implementación correcta:
+- `src/pages/account/Orders.jsx`
+- `src/pages/account/OrderDetail.jsx`
+- `src/pages/CatalogProducts.jsx`
+- `src/pages/CatalogProductDetail.jsx`
+- `src/pages/account/MyPrintJobs.jsx`
+
+---
+
 ## Formularios (criterio general)
 
 - Mantener formularios controlados cuando sea viable

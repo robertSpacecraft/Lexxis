@@ -1,0 +1,121 @@
+.pageWrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContent {
+  flex: 1;
+  padding: var(--spacing-xxl) 0;
+}
+
+.container {
+  max-width: var(--max-width-container, 1200px);
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 var(--padding-horizontal);
+}
+
+.header {
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+}
+
+.title {
+  font-family: var(--font-titles);
+  font-size: var(--font-size-display);
+  color: var(--color-primary);
+  line-height: var(--line-height-heading);
+}
+
+.imageWrapper {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-xl);
+  border: var(--border-default);
+}
+
+.heroImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.articleBody {
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-lg);
+  color: var(--color-text);
+  line-height: var(--line-height-body);
+}
+
+.articleBody h3 {
+  font-family: var(--font-titles);
+  font-size: var(--font-size-h3);
+  color: var(--color-primary);
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-md);
+}
+
+.articleBody p {
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-muted);
+}
+
+.articleBody ul {
+  margin-bottom: var(--spacing-md);
+  padding-left: var(--spacing-xl);
+  color: var(--color-text-muted);
+}
+
+.articleBody li {
+  margin-bottom: var(--spacing-xs);
+}
+
+.articleBody strong {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+.articleBody a {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+}
+
+.articleBody a:hover {
+  text-decoration: underline;
+}
+
+.footer {
+  margin-top: var(--spacing-xxl);
+  text-align: center;
+}
+
+.backButton {
+  background-color: transparent;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.backButton:hover {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: var(--font-size-h2);
+  }
+  .articleBody {
+    font-size: var(--font-size-body);
+  }
+}

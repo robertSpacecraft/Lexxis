@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ordersApi } from '../../api/orders';
+import { useAsync } from '../../hooks/useAsync';
 import styles from './Orders.module.css';
 
 // --- Presentation helpers ---
@@ -52,25 +53,12 @@ function getItemName(item) {
 export default function OrderDetail() {
     const { orderId } = useParams();
 
-    const [order, setOrder] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const fetchOrder = useCallback(() => ordersApi.getOrder(orderId), [orderId]);
 
-    useEffect(() => {
-        const fetchOrder = async () => {
-            try {
-                const data = await ordersApi.getOrder(orderId);
-                setOrder(data);
-            } catch (err) {
-                console.error(err);
-                setError(err.message || 'Error al cargar el pedido.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (orderId) fetchOrder();
-    }, [orderId]);
+    const { data: order, loading, error } = useAsync(fetchOrder, {
+        immediate: !!orderId,
+        errorMessage: 'Error al cargar el pedido.'
+    });
 
     if (loading) {
         return <div className={styles.centerSpinner}>Cargando pedido...</div>;

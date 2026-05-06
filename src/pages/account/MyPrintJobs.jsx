@@ -1,66 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { printFilesApi } from '../../api/printFiles';
 import { printJobsApi } from '../../api/printJobs';
+import { useAsync } from '../../hooks/useAsync';
 import styles from './MyPrintJobs.module.css';
 
 export default function MyPrintJobs() {
-    const [jobsList, setJobsList] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchAllJobs = async () => {
-            setLoading(true);
-            try {
-                // WORKAROUND: Limitación Backend.
-                // Como no existe GET /api/print-jobs, hay que iterar por todos los archivos del usuario (N+1).
-                // En un escenario real con muchos archivos, esto penalizaría la red.
-                const files = await printFilesApi.getPrintFiles();
-                if (!files || files.length === 0) {
-                    setJobsList([]);
-                    setLoading(false);
-                    return;
-                }
-
-                const allJobsNested = await Promise.all(
-                    files.map(async (file) => {
-                        try {
-                            const jobs = await printJobsApi.getPrintJobs(file.id);
-                            // Adjuntamos la info básica del archivo para contexto visual
-                            return jobs.map(j => ({ ...j, fileContext: file }));
-                        } catch (e) {
-                            console.error("Error obteniendo jobs para archivo", file.id);
-                            return [];
-                        }
-                    })
-                );
-
-                const flattened = allJobsNested.flat();
-                setJobsList(flattened);
-            } catch (err) {
-                console.error(err);
-                setError(err.message || 'Error al cargar los trabajos de impresión.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchAllJobs();
-    }, []);
+    const { data, loading, error } = useAsync(printJobsApi.getAllPrintJobs, {
+        errorMessage: 'Error al cargar los trabajos de impresión.'
+    });
 
     if (loading) return <div className={styles.container}><p>Cargando dashboard de trabajos...</p></div>;
     if (error) return <div className={styles.container}><p className={styles.errorText}>{error}</p></div>;
+
+    const rawData = data || [];
+    const jobsList = Array.isArray(rawData) ? rawData : (rawData.data || rawData.items || []);
 
     const pricedJobs = jobsList.filter(j => j.status === 'priced');
     const reviewJobs = jobsList.filter(j => j.status === 'review_pending');
 
     return (
-        <div className={styles.container}>
-            <h1 className={styles.title}>Mis Trabajos de Impresión</h1>
-            <p className={styles.subtitle}>
-                Gestiona tus configuraciones y añade al carrito las impresiones listas.
-            </p>
+        <div className={styles.container} style={{ paddingTop: '1rem' }}>
 
             <div className={styles.layout}>
                 <div className={styles.card}>
@@ -76,13 +35,13 @@ export default function MyPrintJobs() {
                                 <li key={job.id} className={`${styles.jobItem} ${styles.jobItemPriced}`}>
                                     <div className={styles.jobMeta}>
                                         <div className={styles.jobTitle}>
-                                            Job #{job.id} — {job.fileContext?.original_name}
+                                            Job #{job.id} — {job.print_file?.original_name}
                                         </div>
                                         <div className={styles.jobPrice}>
                                             {Number(job.unit_price).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €
                                         </div>
                                     </div>
-                                    <Link to={`/account/printfiles/${job.fileContext?.id}/jobs/${job.id}`}>
+                                    <Link to={`/account/printfiles/${job.print_file?.id}/jobs/${job.id}`}>
                                         <button className={styles.btnPrimary}>Configurar / Añadir</button>
                                     </Link>
                                 </li>
@@ -104,13 +63,13 @@ export default function MyPrintJobs() {
                                 <li key={job.id} className={`${styles.jobItem} ${styles.jobItemReview}`}>
                                     <div className={styles.jobMeta}>
                                         <div className={styles.jobTitle}>
-                                            Job #{job.id} — {job.fileContext?.original_name}
+                                            Job #{job.id} — {job.print_file?.original_name}
                                         </div>
                                         <div className={styles.jobNote}>
                                             Requiere validación manual o forzar continuación.
                                         </div>
                                     </div>
-                                    <Link to={`/account/printfiles/${job.fileContext?.id}/jobs/${job.id}`}>
+                                    <Link to={`/account/printfiles/${job.print_file?.id}/jobs/${job.id}`}>
                                         <button className={styles.btnSecondary}>Gestionar</button>
                                     </Link>
                                 </li>

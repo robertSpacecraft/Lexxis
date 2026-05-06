@@ -97,6 +97,12 @@
   line-height: var(--line-height-body);
 }
 
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
 @media (max-width: 768px) {
   .header h1 {
     font-size: var(--font-size-h1);
