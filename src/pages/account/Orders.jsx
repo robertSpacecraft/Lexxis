@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ordersApi } from '../../api/orders';
 import { useAsync } from '../../hooks/useAsync';
+import { getOrderDisplayNumber } from '../../services/orderItemDisplayService';
 import styles from './Orders.module.css';
 
 function formatDate(dateStr) {
@@ -47,7 +48,7 @@ export default function Orders() {
                         <div key={order.id} className={styles.orderCard}>
                             <div className={styles.orderInfo}>
                                 <div className={styles.orderRef}>
-                                    Pedido #{order.reference ?? order.id}
+                                    Pedido #{getOrderDisplayNumber(order)}
                                 </div>
                                 <div className={styles.orderDate}>
                                     {formatDate(order.created_at)}

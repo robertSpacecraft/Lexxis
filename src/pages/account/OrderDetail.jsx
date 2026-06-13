@@ -2,6 +2,13 @@ import { useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ordersApi } from '../../api/orders';
 import { useAsync } from '../../hooks/useAsync';
+import {
+    formatAddressSummary,
+    getOrderDisplayNumber,
+    getOrderItemMeta,
+    getOrderItemName,
+    getOrderItemTypeLabel,
+} from '../../services/orderItemDisplayService';
 import styles from './Orders.module.css';
 
 // --- Presentation helpers ---
@@ -19,33 +26,6 @@ function formatPrice(value) {
     const num = parseFloat(value);
     if (!Number.isFinite(num)) return '—';
     return `${num.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
-}
-
-function getItemTypeLabel(type) {
-    const labels = {
-        print_job: 'Impresión 3D',
-        product_design: 'Diseño personalizado',
-        product_variant: 'Producto de catálogo',
-    };
-    return labels[type] ?? type;
-}
-
-function getItemName(item) {
-    if (item.type === 'print_job') {
-        const fileName = item.buyable?.print_file?.original_name;
-        return fileName
-            ? `Impresión: ${fileName}`
-            : `Trabajo de impresión #${item.buyable?.id ?? '—'}`;
-    }
-    if (item.type === 'product_design') {
-        return item.buyable?.product?.name
-            ? `Diseño: ${item.buyable.product.name}`
-            : `Diseño personalizado #${item.buyable?.id ?? '—'}`;
-    }
-    if (item.type === 'product_variant') {
-        return item.buyable?.product?.name ?? `Variante #${item.buyable?.id ?? '—'}`;
-    }
-    return `Ítem #${item.id}`;
 }
 
 // --- Component ---
@@ -81,6 +61,9 @@ export default function OrderDetail() {
     const total = order?.total != null
         ? parseFloat(order.total)
         : items.reduce((acc, item) => acc + parseFloat(item.subtotal ?? 0), 0);
+    const orderNumber = getOrderDisplayNumber(order);
+    const shippingAddress = formatAddressSummary(order?.shippingAddress ?? order?.shipping_address);
+    const billingAddress = formatAddressSummary(order?.billingAddress ?? order?.billing_address);
 
     return (
         <div>
@@ -89,7 +72,7 @@ export default function OrderDetail() {
             </Link>
 
             <h1 className={styles.title}>
-                Pedido #{order?.reference ?? order?.id}
+                Pedido #{orderNumber}
             </h1>
 
             <div className={styles.detailHeader}>
@@ -100,6 +83,16 @@ export default function OrderDetail() {
                     <span>
                         Estado: <strong>{order?.status ?? '—'}</strong>
                     </span>
+                    {shippingAddress && (
+                        <span>
+                            Envío: <strong>{shippingAddress}</strong>
+                        </span>
+                    )}
+                    {billingAddress && (
+                        <span>
+                            Facturación: <strong>{billingAddress}</strong>
+                        </span>
+                    )}
                 </div>
             </div>
 
@@ -109,22 +102,29 @@ export default function OrderDetail() {
                         No hay ítems registrados en este pedido.
                     </p>
                 ) : (
-                    items.map((item) => (
-                        <div key={item.id} className={styles.detailItem}>
-                            <div className={styles.detailItemName}>
-                                {getItemName(item)}
+                    items.map((item) => {
+                        const itemMeta = [
+                            getOrderItemTypeLabel(item),
+                            getOrderItemMeta(item),
+                        ].filter(Boolean).join(' · ');
+
+                        return (
+                            <div key={item.id} className={styles.detailItem}>
+                                <div className={styles.detailItemName}>
+                                    {getOrderItemName(item)}
+                                </div>
+                                <div className={styles.detailItemMeta}>
+                                    {itemMeta}
+                                </div>
+                                <div className={styles.detailItemQty}>
+                                    Cant: {item.quantity}
+                                </div>
+                                <div className={styles.detailItemPrice}>
+                                    {formatPrice(item.subtotal ?? item.unit_price)}
+                                </div>
                             </div>
-                            <div className={styles.detailItemMeta}>
-                                {getItemTypeLabel(item.type)}
-                            </div>
-                            <div className={styles.detailItemQty}>
-                                Cant: {item.quantity}
-                            </div>
-                            <div className={styles.detailItemPrice}>
-                                {formatPrice(item.subtotal ?? item.unit_price)}
-                            </div>
-                        </div>
-                    ))
+                        );
+                    })
                 )}
             </div>
 

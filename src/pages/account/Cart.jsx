@@ -2,42 +2,14 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { cartApi } from '../../api/cartApi';
 import { ordersApi } from '../../api/orders';
+import {
+    getOrderItemIcon,
+    getOrderItemMeta,
+    getOrderItemName,
+    getOrderItemTypeLabel,
+    isProductVariantItem,
+} from '../../services/orderItemDisplayService';
 import styles from './Cart.module.css';
-
-// --- Presentation helpers (display only, no data normalization) ---
-
-function getItemName(item) {
-    if (item.type === 'print_job') {
-        const fileName = item.buyable?.print_file?.original_name;
-        return fileName
-            ? `Impresión: ${fileName}`
-            : `Trabajo de impresión #${item.buyable?.id ?? '—'}`;
-    }
-    if (item.type === 'product_design') {
-        return item.buyable?.product?.name
-            ? `Diseño: ${item.buyable.product.name}`
-            : `Diseño personalizado #${item.buyable?.id ?? '—'}`;
-    }
-    if (item.type === 'product_variant') {
-        return item.buyable?.product?.name ?? `Variante #${item.buyable?.id ?? '—'}`;
-    }
-    return `Ítem #${item.id}`;
-}
-
-function getItemTypeLabel(type) {
-    const labels = {
-        print_job: 'Impresión 3D',
-        product_design: 'Diseño personalizado',
-        product_variant: 'Producto de catálogo',
-    };
-    return labels[type] ?? type;
-}
-
-function getItemIcon(type) {
-    if (type === 'print_job') return '🖨️';
-    if (type === 'product_design') return '🎨';
-    return '📦';
-}
 
 function formatPrice(value) {
     const num = parseFloat(value);
@@ -149,65 +121,65 @@ export default function Cart() {
             ) : (
                 <div className={styles.cartLayout}>
                     <div className={styles.itemsList}>
-                        {items.map((item) => (
-                            <div key={item.id} className={styles.cartItem}>
-                                <div className={styles.itemIcon}>
-                                    {getItemIcon(item.type)}
-                                </div>
+                        {items.map((item) => {
+                            const itemMeta = getOrderItemMeta(item);
+                            const canUpdateQuantity = isProductVariantItem(item);
 
-                                <div className={styles.itemDetails}>
-                                    <div className={styles.itemName}>{getItemName(item)}</div>
-                                    <div className={styles.itemMeta}>{getItemTypeLabel(item.type)}</div>
-                                    {item.type === 'product_design' && item.buyable && (
-                                        <div className={styles.itemMeta}>
-                                            {[
-                                                item.buyable.color_name,
-                                                item.buyable.size_eu && `Talla ${item.buyable.size_eu}`,
-                                            ].filter(Boolean).join(' · ')}
-                                        </div>
-                                    )}
-                                </div>
+                            return (
+                                <div key={item.id} className={styles.cartItem}>
+                                    <div className={styles.itemIcon}>
+                                        {getOrderItemIcon(item)}
+                                    </div>
 
-                                <div className={styles.itemQuantity}>
-                                    {item.type === 'product_variant' ? (
-                                        <div className={styles.quantityControl}>
-                                            <button
-                                                className={styles.btnQuantity}
-                                                onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
-                                                disabled={updatingItemId === item.id || item.quantity <= 1}
-                                            >
-                                                −
-                                            </button>
-                                            <span className={styles.quantityValue}>{item.quantity}</span>
-                                            <button
-                                                className={styles.btnQuantity}
-                                                onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
-                                                disabled={updatingItemId === item.id}
-                                            >
-                                                +
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <span>Cant: {item.quantity}</span>
-                                    )}
-                                </div>
+                                    <div className={styles.itemDetails}>
+                                        <div className={styles.itemName}>{getOrderItemName(item)}</div>
+                                        <div className={styles.itemMeta}>{getOrderItemTypeLabel(item)}</div>
+                                        {itemMeta && (
+                                            <div className={styles.itemMeta}>{itemMeta}</div>
+                                        )}
+                                    </div>
 
-                                <div className={styles.itemPrice}>
-                                    {formatPrice(item.subtotal ?? item.unit_price)}
-                                </div>
+                                    <div className={styles.itemQuantity}>
+                                        {canUpdateQuantity ? (
+                                            <div className={styles.quantityControl}>
+                                                <button
+                                                    className={styles.btnQuantity}
+                                                    onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
+                                                    disabled={updatingItemId === item.id || item.quantity <= 1}
+                                                >
+                                                    −
+                                                </button>
+                                                <span className={styles.quantityValue}>{item.quantity}</span>
+                                                <button
+                                                    className={styles.btnQuantity}
+                                                    onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
+                                                    disabled={updatingItemId === item.id}
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <span>Cant: {item.quantity}</span>
+                                        )}
+                                    </div>
 
-                                <div className={styles.itemActions}>
-                                    <button
-                                        className={styles.btnDanger}
-                                        onClick={() => handleRemoveItem(item.id)}
-                                        disabled={deletingItemId === item.id}
-                                        title="Eliminar del carrito"
-                                    >
-                                        {deletingItemId === item.id ? '...' : 'Eliminar'}
-                                    </button>
+                                    <div className={styles.itemPrice}>
+                                        {formatPrice(item.subtotal ?? item.unit_price)}
+                                    </div>
+
+                                    <div className={styles.itemActions}>
+                                        <button
+                                            className={styles.btnDanger}
+                                            onClick={() => handleRemoveItem(item.id)}
+                                            disabled={deletingItemId === item.id}
+                                            title="Eliminar del carrito"
+                                        >
+                                            {deletingItemId === item.id ? '...' : 'Eliminar'}
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
 
                     <div className={styles.summaryCard}>
