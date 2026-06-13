@@ -1,30 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { catalogApi } from '../api/catalog';
 import { getImageUrl } from '../utils/imageMapper';
+import { useAsync } from '../hooks/useAsync';
 import Navbar from '../components/Navbar';
 import styles from './CatalogVariants.module.css';
 
 export default function CatalogVariants() {
     const { productId } = useParams();
-    const [variants, setVariants] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchVariants = async () => {
-            try {
-                const variantsData = await catalogApi.getVariants(productId);
-                setVariants(variantsData || []);
-            } catch (err) {
-                console.error(err);
-                setError(err.message || 'No se pudieron cargar las variantes.');
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchVariants();
-    }, [productId]);
+    const fetchVariants = useCallback(() => catalogApi.getVariants(productId), [productId]);
+
+    const { data, loading, error } = useAsync(fetchVariants, {
+        immediate: !!productId,
+        errorMessage: 'No se pudieron cargar las variantes.'
+    });
+
+    const variants = data || [];
 
     if (loading) return (
         <>
@@ -61,10 +53,10 @@ export default function CatalogVariants() {
                             <Link key={variant.id} to={`/catalog/products/${productId}/variants/${variant.id}`} className={styles.card}>
                                 <div className={styles.imageContainer}>
                                     {variant.main_image ? (
-                                        <img 
-                                            src={getImageUrl(variant.main_image)} 
-                                            alt={`Variante ${variant.sku}`} 
-                                            className={styles.variantImage} 
+                                        <img
+                                            src={getImageUrl(variant.main_image)}
+                                            alt={`Variante ${variant.sku}`}
+                                            className={styles.variantImage}
                                         />
                                     ) : (
                                         <div className={styles.imagePlaceholder}>

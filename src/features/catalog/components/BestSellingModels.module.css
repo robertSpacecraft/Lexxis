@@ -1,0 +1,291 @@
+.section {
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-sm);
+  margin: 0 auto var(--spacing-xl);
+  max-width: 53rem;
+  padding: var(--spacing-md);
+}
+
+.header {
+  align-items: flex-end;
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm);
+}
+
+.eyebrow {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-xxs);
+  text-transform: uppercase;
+}
+
+.title {
+  color: var(--color-primary);
+  font-family: var(--font-titles);
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-bold);
+}
+
+.catalogLink {
+  align-items: center;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-primary);
+  display: inline-flex;
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-bold);
+  justify-content: center;
+  min-width: 7rem;
+  padding: var(--spacing-xs) var(--spacing-md);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.catalogLink:hover,
+.catalogLink:focus-visible {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-on-overlay);
+}
+
+.catalogLink:focus-visible,
+.card:focus-visible {
+  outline: 0.1875rem solid var(--color-accent);
+  outline-offset: 0.1875rem;
+}
+
+.grid {
+  display: grid;
+  gap: var(--spacing-md);
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 16.5rem));
+  justify-content: start;
+}
+
+.card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  max-width: 16.5rem;
+  min-height: 100%;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  width: 100%;
+}
+
+.card:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-0.125rem);
+}
+
+.imageWrapper {
+  align-items: center;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  height: 8.75rem;
+  justify-content: center;
+  overflow: hidden;
+  padding: var(--spacing-md);
+}
+
+.image {
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  width: 100%;
+}
+
+.card:hover .image {
+  transform: scale(1.02);
+}
+
+.imagePlaceholder {
+  align-items: center;
+  background: var(--color-surface);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  display: flex;
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-bold);
+  height: 100%;
+  justify-content: center;
+  width: 100%;
+}
+
+.cardBody {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: var(--spacing-md);
+}
+
+.metaRow {
+  align-items: center;
+  display: flex;
+  gap: var(--spacing-xs);
+  justify-content: space-between;
+  margin-bottom: var(--spacing-xs);
+  min-width: 0;
+}
+
+.rank {
+  background: var(--color-primary);
+  border-radius: var(--radius-sm);
+  color: var(--color-on-overlay);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-bold);
+  padding: var(--spacing-xxs) var(--spacing-xs);
+}
+
+.price {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-bold);
+  text-align: right;
+}
+
+.modelName {
+  color: var(--color-text);
+  font-family: var(--font-titles);
+  font-size: var(--font-size-body-lg);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-xs);
+}
+
+.description {
+  color: var(--color-text-muted);
+  display: -webkit-box;
+  flex: 1;
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-body);
+  margin-bottom: var(--spacing-md);
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.action {
+  align-items: center;
+  background: var(--color-accent);
+  border-radius: var(--radius-sm);
+  color: var(--color-primary);
+  display: inline-flex;
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-bold);
+  justify-content: center;
+  min-width: 7rem;
+  padding: var(--spacing-xs) var(--spacing-md);
+  transition: background 0.2s ease, color 0.2s ease;
+  width: fit-content;
+}
+
+.card:hover .action,
+.card:focus-visible .action {
+  background: var(--color-primary);
+  color: var(--color-on-overlay);
+}
+
+.feedback {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body-sm);
+  padding: var(--spacing-md);
+  text-align: center;
+}
+
+.skeletonCard {
+  pointer-events: none;
+  padding: var(--spacing-md);
+}
+
+.skeletonImage,
+.skeletonLineLarge,
+.skeletonLine,
+.skeletonLineShort {
+  background: linear-gradient(90deg, var(--color-border), var(--color-bg), var(--color-border));
+  background-size: 200% 100%;
+  border-radius: var(--radius-sm);
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.skeletonImage {
+  height: 8.75rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.skeletonLineLarge {
+  height: 1.125rem;
+  margin-bottom: var(--spacing-sm);
+  width: 75%;
+}
+
+.skeletonLine {
+  height: 1rem;
+  margin-bottom: var(--spacing-xs);
+  width: 100%;
+}
+
+.skeletonLineShort {
+  height: 1rem;
+  width: 55%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (max-width: 56rem) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(14rem, 16.5rem));
+  }
+
+  .imageWrapper,
+  .skeletonImage {
+    height: 8.5rem;
+  }
+}
+
+@media (max-width: 40rem) {
+  .section {
+    max-width: 100%;
+    padding: var(--spacing-md);
+  }
+
+  .header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .catalogLink {
+    align-self: flex-start;
+    width: fit-content;
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 16.5rem);
+    justify-content: center;
+  }
+
+  .imageWrapper,
+  .skeletonImage {
+    height: 8.25rem;
+  }
+}
