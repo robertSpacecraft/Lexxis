@@ -3,7 +3,7 @@
   border: var(--border-default);
   border-radius: var(--radius-sm);
   margin: 0 auto var(--spacing-xl);
-  max-width: 53rem;
+  max-width: 56rem;
   padding: var(--spacing-md);
 }
 
@@ -61,8 +61,8 @@
 .grid {
   display: grid;
   gap: var(--spacing-md);
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 16.5rem));
-  justify-content: start;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  justify-content: stretch;
 }
 
 .card {
